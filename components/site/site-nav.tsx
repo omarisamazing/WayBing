@@ -16,8 +16,13 @@ export function SiteNav() {
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur-sm">
       <div className="mx-auto flex w-full max-w-[100rem] items-center justify-between gap-4 px-4 sm:px-6 lg:px-10">
-        <Link href="/" className="-ml-1 flex items-center py-4 pr-4 pl-1" aria-label="WayBing home">
-          <Logo />
+        <Link
+          href="/"
+          className="-ml-1 flex items-center py-3.5 pr-4 pl-1 outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          aria-label="WayBing home"
+        >
+          <Logo size="md" className="sm:hidden" />
+          <Logo size="lg" className="hidden sm:inline-flex" />
         </Link>
 
         <nav aria-label="Main" className="hidden items-stretch self-stretch md:flex">

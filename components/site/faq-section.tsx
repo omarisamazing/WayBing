@@ -49,12 +49,19 @@ export function FaqSection() {
                       />
                     </button>
                   </h3>
+                  {/* 0fr -> 1fr gives a real height transition without measuring the DOM. */}
                   <div
                     id={`faq-panel-${i}`}
-                    hidden={!isOpen}
-                    className="grid grid-cols-1 pb-6 sm:pl-11 lg:grid-cols-[minmax(0,44rem)]"
+                    role="region"
+                    aria-hidden={!isOpen}
+                    className={cn(
+                      'grid overflow-hidden transition-[grid-template-rows,opacity] duration-300 ease-out motion-reduce:transition-none sm:pl-11',
+                      isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+                    )}
                   >
-                    <p className="text-sm leading-relaxed text-muted-foreground">{faq.a}</p>
+                    <p className="overflow-hidden pb-6 text-sm leading-relaxed text-muted-foreground lg:max-w-[44rem]">
+                      {faq.a}
+                    </p>
                   </div>
                 </div>
               )

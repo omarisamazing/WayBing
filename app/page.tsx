@@ -9,30 +9,47 @@ import { RoiCalculator } from '@/components/site/roi-calculator'
 import { Shell, SectionHead, Stat } from '@/components/site/primitives'
 import { CLIENT_LOGOS, ENGINE_STEPS, HEADLINE_STATS, SERVICES } from '@/lib/content'
 
+/** Rich-result data for the FAQ block below. Static, so it costs nothing at runtime. */
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: FAQS.map((faq) => ({
+    '@type': 'Question',
+    name: faq.q,
+    acceptedAnswer: { '@type': 'Answer', text: faq.a },
+  })),
+}
+
+/** The 2x2 block inside the hero snapshot card. */
+const SNAPSHOT_STATS = [
+  ...HEADLINE_STATS.slice(1),
+  { value: '41', label: 'Accounts scaled past $100k/mo' },
+]
+
 export default function HomePage() {
   return (
     <>
       <section className="border-b border-border">
         <Shell className="grid gap-12 py-14 sm:py-20 lg:grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)] lg:gap-16 lg:py-24">
           <div>
-            <p className="label-mono text-muted-foreground">
+            <p className="rise label-mono text-muted-foreground">
               <span className="text-accent">✳</span> Performance marketing & growth design
             </p>
-            <h1 className="display-tight mt-6 text-[clamp(2.75rem,8.5vw,7rem)] text-balance">
+            <h1 className="rise rise-1 display-tight mt-6 text-[clamp(2.75rem,8.5vw,7rem)] text-balance">
               We don&apos;t sell
               <br />
               retainers. We build
               <br />
               <span className="text-accent">revenue engines.</span>
             </h1>
-            <p className="mt-8 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+            <p className="rise rise-2 mt-8 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
               Conversion-first design, CRO, paid media and SEO — wired to server-side tracking so every decision is made on
               numbers that match your bank account, not a platform screenshot.
             </p>
 
-            <AuditRequest className="mt-9 max-w-2xl" />
+            <AuditRequest className="rise rise-3 mt-9 max-w-2xl" />
 
-            <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-3">
+            <div className="rise rise-4 mt-10 flex flex-wrap items-center gap-x-8 gap-y-3">
               {['No lock-in contracts', 'You own every asset', '60-day guarantee'].map((item) => (
                 <span key={item} className="inline-flex items-center gap-2 label-mono text-muted-foreground">
                   <Check className="size-3.5 text-accent" />
@@ -42,7 +59,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="flex flex-col justify-between border border-foreground bg-card">
+          <div className="rise rise-2 flex flex-col justify-between border border-foreground bg-card">
             <div className="border-b border-border p-6">
               <div className="flex items-center justify-between">
                 <p className="label-mono text-muted-foreground">Live account snapshot</p>
@@ -65,8 +82,8 @@ export default function HomePage() {
                 {[34, 41, 38, 52, 47, 63, 58, 71, 66, 82, 78, 96].map((height, i) => (
                   <div
                     key={i}
-                    style={{ height: `${height}%` }}
-                    className={`flex-1 ${i > 8 ? 'bg-accent' : 'bg-foreground/15'}`}
+                    style={{ height: `${height}%`, '--rise-delay': `${300 + i * 45}ms` } as React.CSSProperties}
+                    className={`grow-bar flex-1 ${i > 8 ? 'bg-accent' : 'bg-foreground/15'}`}
                   />
                 ))}
               </div>
@@ -85,22 +102,17 @@ export default function HomePage() {
               </dl>
             </div>
 
+            {/* Hairlines are placed by position, so cells can be added or removed freely. */}
             <dl className="grid grid-cols-2">
-              {HEADLINE_STATS.slice(1).map((stat, i) => (
+              {SNAPSHOT_STATS.map((stat) => (
                 <div
                   key={stat.label}
-                  className={`border-border p-6 ${i === 0 ? 'border-r border-b' : ''} ${i === 1 ? 'border-b' : ''} ${
-                    i === 2 ? 'border-r' : ''
-                  }`}
+                  className="border-border p-6 [&:not(:nth-last-child(-n+2))]:border-b [&:nth-child(odd)]:border-r"
                 >
                   <dd className="font-mono text-2xl leading-none tracking-[-0.03em]">{stat.value}</dd>
                   <dt className="mt-3 label-mono text-muted-foreground">{stat.label}</dt>
                 </div>
               ))}
-              <div className="p-6">
-                <dd className="font-mono text-2xl leading-none tracking-[-0.03em]">41</dd>
-                <dt className="mt-3 label-mono text-muted-foreground">Accounts scaled past $100k/mo</dt>
-              </div>
             </dl>
             <Link
               href="/work"
@@ -115,14 +127,9 @@ export default function HomePage() {
 
       <section aria-label="Client proof" className="overflow-hidden border-b border-border bg-muted">
         <Shell>
-          <dl className="grid border-b border-border sm:grid-cols-2 lg:grid-cols-4">
-            {HEADLINE_STATS.map((stat, i) => (
-              <div
-                key={stat.label}
-                className={`border-border ${i < 3 ? 'border-b sm:border-b-0' : ''} ${
-                  i % 2 === 0 ? 'sm:border-r lg:border-r' : 'lg:border-r'
-                } last:lg:border-r-0`}
-              >
+          <dl className="grid border-t border-l border-border sm:grid-cols-2 lg:grid-cols-4">
+            {HEADLINE_STATS.map((stat) => (
+              <div key={stat.label} className="border-r border-b border-border">
                 <Stat value={stat.value} label={stat.label} />
               </div>
             ))}
@@ -247,6 +254,7 @@ export default function HomePage() {
 
       <FaqSection />
       <BookingSection />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
     </>
   )
 }

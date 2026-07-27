@@ -1,5 +1,7 @@
 'use server'
 
+import { SITE } from '@/lib/site'
+
 export type LeadResult = {
   ok: boolean
   message: string
@@ -184,7 +186,7 @@ export async function submitLead(input: Lead): Promise<LeadResult> {
   } catch {
     return {
       ok: false,
-      message: 'We could not send that right now. Email hello@waybing.com and we will pick it up.',
+      message: `We could not send that right now. Email ${SITE.email} and we will pick it up.`,
     }
   }
 }

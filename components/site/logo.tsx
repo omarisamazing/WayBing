@@ -16,11 +16,32 @@ export function LogoMark({ className }: { className?: string }) {
   )
 }
 
-export function Logo({ className, markClassName }: { className?: string; markClassName?: string }) {
+const SIZES = {
+  sm: { mark: 'h-4', word: 'text-[13px] tracking-[0.16em]', gap: 'gap-2' },
+  md: { mark: 'h-6', word: 'text-[17px] tracking-[0.14em]', gap: 'gap-2.5' },
+  lg: { mark: 'h-9', word: 'text-2xl tracking-[0.12em]', gap: 'gap-3' },
+} as const
+
+export function Logo({
+  size = 'md',
+  className,
+  markClassName,
+}: {
+  size?: keyof typeof SIZES
+  className?: string
+  markClassName?: string
+}) {
+  const s = SIZES[size]
   return (
-    <span className={cn('inline-flex items-center gap-2', className)}>
-      <LogoMark className={cn('h-3.5', markClassName)} />
-      <span className="font-sans text-[13px] font-semibold uppercase tracking-[0.16em]">WayBing</span>
+    <span className={cn('group/logo inline-flex items-center', s.gap, className)}>
+      <LogoMark
+        className={cn(
+          s.mark,
+          'transition-transform duration-500 ease-out group-hover/logo:-translate-y-px motion-reduce:transition-none motion-reduce:group-hover/logo:translate-y-0',
+          markClassName
+        )}
+      />
+      <span className={cn('font-sans font-semibold uppercase leading-none', s.word)}>WayBing</span>
     </span>
   )
 }

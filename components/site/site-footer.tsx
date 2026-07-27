@@ -1,7 +1,8 @@
 import Link from 'next/link'
-import { LogoMark } from '@/components/site/logo'
+import { Logo } from '@/components/site/logo'
 import { CtaButton } from '@/components/site/cta-button'
 import { SERVICES } from '@/lib/content'
+import { SITE } from '@/lib/site'
 
 const columns = [
   {
@@ -21,12 +22,7 @@ const columns = [
   },
   {
     title: 'Social',
-    links: [
-      { href: 'https://linkedin.com', label: 'LinkedIn' },
-      { href: 'https://x.com', label: 'X / Twitter' },
-      { href: 'https://instagram.com', label: 'Instagram' },
-      { href: 'https://youtube.com', label: 'YouTube' },
-    ],
+    links: SITE.socials.map((social) => ({ href: social.href, label: social.label })),
   },
 ]
 
@@ -36,7 +32,7 @@ export function SiteFooter() {
       <div className="mx-auto w-full max-w-[100rem] px-4 sm:px-6 lg:px-10">
         <div className="flex flex-col gap-8 border-b border-background/20 py-12 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-2xl">
-            <LogoMark className="h-6 text-background" />
+            <Logo size="lg" className="text-background" />
             <h2 className="display-tight mt-6 text-[clamp(2rem,5.5vw,4.5rem)]">
               Stop paying for <span className="text-accent">activity.</span>
               <br />
@@ -60,7 +56,7 @@ export function SiteFooter() {
                   <li key={link.label}>
                     <Link
                       href={link.href}
-                      className="text-sm text-background/80 underline-offset-4 transition-colors hover:text-accent hover:underline"
+                      className="link-sweep inline-block text-sm text-background/80 transition-colors hover:text-accent"
                     >
                       {link.label}
                     </Link>
@@ -72,19 +68,29 @@ export function SiteFooter() {
           <div>
             <p className="label-mono text-background/50">Contact</p>
             <ul className="mt-4 flex flex-col gap-2.5 font-mono text-sm text-background/80">
-              <li>growth@waybing.com</li>
-              <li>+1 (415) 555-0142</li>
+              <li>
+                <a href={`mailto:${SITE.email}`} className="link-sweep inline-block transition-colors hover:text-accent">
+                  {SITE.email}
+                </a>
+              </li>
+              <li>
+                <a href={SITE.phoneHref} className="link-sweep inline-block transition-colors hover:text-accent">
+                  {SITE.phone}
+                </a>
+              </li>
               <li className="leading-relaxed text-background/50">
                 Remote-first
                 <br />
-                London / New York
+                {SITE.locations.join(' / ')}
               </li>
             </ul>
           </div>
         </div>
 
         <div className="flex flex-col gap-3 border-t border-background/20 py-6 md:flex-row md:items-center md:justify-between">
-          <p className="label-mono text-background/50">© {new Date().getFullYear()} WayBing Ltd. All rights reserved.</p>
+          <p className="label-mono text-background/50">
+            © {new Date().getFullYear()} {SITE.legalName}. All rights reserved.
+          </p>
           <p className="max-w-3xl font-mono text-[10px] leading-relaxed text-background/40">
             Results shown reflect specific client engagements and are not a guarantee of future performance. WayBing is not
             affiliated with, endorsed by, or sponsored by Meta, Google, TikTok or any advertising platform.
