@@ -1,3 +1,4 @@
+import { Counter } from '@/components/site/motion'
 import { Shell } from '@/components/site/primitives'
 
 export function PageHero({
@@ -26,7 +27,9 @@ export function PageHero({
           <dl className="rise rise-3 mt-12 grid border-t border-l border-border sm:grid-cols-2 lg:grid-cols-4">
             {meta.map((item) => (
               <div key={item.label} className="border-r border-b border-border px-5 py-6">
-                <dd className="figure-mono text-2xl leading-none tracking-[-0.03em]">{item.value}</dd>
+                <dd>
+                  <Counter value={item.value} className="figure-mono text-2xl leading-none tracking-[-0.03em]" />
+                </dd>
                 <dt className="mt-3 label-mono text-muted-foreground">{item.label}</dt>
               </div>
             ))}

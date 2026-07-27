@@ -2,6 +2,8 @@ import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { Instrument_Sans, JetBrains_Mono } from 'next/font/google'
 import { BookingProvider } from '@/components/site/booking-provider'
+import { Cursor } from '@/components/site/cursor'
+import { ScrollProgress } from '@/components/site/scroll-progress'
 import { SiteNav } from '@/components/site/site-nav'
 import { SiteFooter } from '@/components/site/site-footer'
 import { Ticker } from '@/components/site/ticker'
@@ -98,6 +100,8 @@ export default function RootLayout({
         >
           Skip to content
         </a>
+        <ScrollProgress />
+        <Cursor />
         <BookingProvider>
           <Ticker />
           <SiteNav />

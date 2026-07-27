@@ -22,7 +22,7 @@ export function CaseGrid() {
               type="button"
               onClick={() => setActive(filter)}
               aria-pressed={isActive}
-              className={`border px-4 py-2 font-mono text-[11px] uppercase tracking-[0.12em] transition-[color,background-color,border-color] duration-300 ease-out ${
+              className={`press border px-4 py-2 font-mono text-[11px] uppercase tracking-[0.12em] ${
                 isActive
                   ? 'border-foreground bg-foreground text-background'
                   : 'border-border text-muted-foreground hover:border-foreground hover:text-foreground'

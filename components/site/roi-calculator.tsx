@@ -3,16 +3,22 @@
 import { useMemo, useState } from 'react'
 import { ArrowUpRight } from 'lucide-react'
 import { useBooking } from '@/components/site/booking-provider'
+import { Tween } from '@/components/site/motion'
 import { Shell, SectionHead } from '@/components/site/primitives'
 
 const BENCHMARK = 3.5
 
+/** Module scope keeps the formatter identity stable across renders for <Tween>. */
 function currency(value: number) {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
     maximumFractionDigits: 0,
   }).format(Math.max(0, Math.round(value)))
+}
+
+function percent(value: number) {
+  return `${Math.round(value)}%`
 }
 
 export function RoiCalculator() {
@@ -101,11 +107,15 @@ export function RoiCalculator() {
             <dl className="grid grid-cols-2 border-t border-border pt-6">
               <div className="pr-4">
                 <dt className="label-mono text-muted-foreground">Revenue today</dt>
-                <dd className="figure-mono mt-2 text-lg">{currency(current)}</dd>
+                <dd className="figure-mono mt-2 text-lg">
+                  <Tween value={current} format={currency} />
+                </dd>
               </div>
               <div className="border-l border-border pl-4">
                 <dt className="label-mono text-muted-foreground">At 3.5x benchmark</dt>
-                <dd className="figure-mono mt-2 text-lg">{currency(benchmarked)}</dd>
+                <dd className="figure-mono mt-2 text-lg">
+                  <Tween value={benchmarked} format={currency} />
+                </dd>
               </div>
             </dl>
           </div>
@@ -114,7 +124,7 @@ export function RoiCalculator() {
             <div>
               <p className="label-mono text-background/50">Monthly revenue gap</p>
               <p className="figure-mono mt-4 text-[clamp(2.5rem,7vw,4.5rem)] font-medium leading-[0.9] tracking-[-0.04em] text-accent">
-                {currency(gap)}
+                <Tween value={gap} format={currency} duration={520} />
               </p>
               <p className="mt-5 max-w-md text-sm leading-relaxed text-background/70">
                 {gap > 0
@@ -125,7 +135,9 @@ export function RoiCalculator() {
               <div className="mt-8">
                 <div className="flex items-center justify-between label-mono text-background/50">
                   <span>Progress to benchmark</span>
-                  <span className="tabular-nums text-accent">{pct.toFixed(0)}%</span>
+                  <span className="tabular-nums text-accent">
+                    <Tween value={pct} format={percent} />
+                  </span>
                 </div>
                 <div className="mt-2 h-2 w-full bg-background/15">
                   <div
@@ -139,7 +151,7 @@ export function RoiCalculator() {
             <button
               type="button"
               onClick={() => open('strategy')}
-              className="group inline-flex h-14 items-center justify-between gap-3 border border-background bg-background px-6 text-left font-mono text-[11px] uppercase tracking-[0.14em] text-foreground transition-colors hover:border-accent hover:bg-accent hover:text-accent-foreground"
+              className="press group inline-flex h-14 items-center justify-between gap-3 border border-background bg-background px-6 text-left font-mono text-[11px] uppercase tracking-[0.14em] text-foreground transition-colors hover:border-accent hover:bg-accent hover:text-accent-foreground"
             >
               <span className="text-balance">
                 {gap > 0 ? `Close my ${currency(gap)} gap` : 'Plan my next scaling phase'}

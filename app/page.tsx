@@ -5,6 +5,8 @@ import { BookingSection } from '@/components/site/booking-section'
 import { CtaButton } from '@/components/site/cta-button'
 import { FaqSection } from '@/components/site/faq-section'
 import { LogoMark } from '@/components/site/logo'
+import { Bars, Counter, Meter } from '@/components/site/motion'
+import { Reveal } from '@/components/site/reveal'
 import { RoiCalculator } from '@/components/site/roi-calculator'
 import { Shell, SectionHead, Stat } from '@/components/site/primitives'
 import { CLIENT_LOGOS, ENGINE_STEPS, FAQS, HEADLINE_STATS, SERVICES } from '@/lib/content'
@@ -24,6 +26,16 @@ const faqSchema = {
 const SNAPSHOT_STATS = [
   ...HEADLINE_STATS.slice(1),
   { value: '41', label: 'Accounts scaled past $100k/mo' },
+]
+
+/** Trailing-90d revenue mix. Heights for the bar chart, shares for the meters. */
+const REVENUE_TREND = [34, 41, 38, 52, 47, 63, 58, 71, 66, 82, 78, 96]
+
+const CHANNEL_MIX = [
+  { channel: 'Paid social', share: 38 },
+  { channel: 'Paid search', share: 31 },
+  { channel: 'Organic / SEO', share: 24 },
+  { channel: 'Email & lifecycle', share: 7 },
 ]
 
 export default function HomePage() {
@@ -65,7 +77,10 @@ export default function HomePage() {
                 <p className="label-mono text-muted-foreground">Live account snapshot</p>
                 <LogoMark className="h-3 text-accent" />
               </div>
-              <p className="figure-mono mt-5 text-[clamp(2rem,4vw,2.75rem)] leading-none tracking-[-0.04em]">$84.6M</p>
+              <Counter
+                value="$84.6M"
+                className="figure-mono mt-5 text-[clamp(2rem,4vw,2.75rem)] leading-none tracking-[-0.04em]"
+              />
               <p className="mt-3 label-mono text-muted-foreground">Tracked client revenue since 2019</p>
             </div>
 
@@ -74,29 +89,15 @@ export default function HomePage() {
                 <p className="label-mono text-muted-foreground">Attributed revenue by channel</p>
                 <p className="label-mono text-accent">Trailing 90d</p>
               </div>
-              <div
-                aria-hidden="true"
-                className="flex h-24 items-end gap-1.5 sm:h-28"
-                role="presentation"
-              >
-                {[34, 41, 38, 52, 47, 63, 58, 71, 66, 82, 78, 96].map((height, i) => (
-                  <div
-                    key={i}
-                    style={{ height: `${height}%`, '--rise-delay': `${300 + i * 45}ms` } as React.CSSProperties}
-                    className={`grow-bar flex-1 ${i > 8 ? 'bg-accent' : 'bg-foreground/15'}`}
-                  />
-                ))}
-              </div>
-              <dl className="flex flex-col gap-2 border-t border-border pt-4">
-                {[
-                  ['Paid social', '38%'],
-                  ['Paid search', '31%'],
-                  ['Organic / SEO', '24%'],
-                  ['Email & lifecycle', '7%'],
-                ].map(([channel, share]) => (
-                  <div key={channel} className="flex items-center justify-between label-mono">
-                    <dt className="text-muted-foreground">{channel}</dt>
-                    <dd>{share}</dd>
+              <Bars values={REVENUE_TREND} accentFrom={9} className="h-24 sm:h-28" />
+              <dl className="flex flex-col gap-3 border-t border-border pt-4">
+                {CHANNEL_MIX.map(({ channel, share }, i) => (
+                  <div key={channel} className="flex flex-col gap-1.5">
+                    <div className="flex items-center justify-between label-mono">
+                      <dt className="text-muted-foreground">{channel}</dt>
+                      <dd>{share}%</dd>
+                    </div>
+                    <Meter value={share} delay={i * 90} />
                   </div>
                 ))}
               </dl>
@@ -109,7 +110,9 @@ export default function HomePage() {
                   key={stat.label}
                   className="border-border p-6 [&:not(:nth-last-child(-n+2))]:border-b [&:nth-child(odd)]:border-r"
                 >
-                  <dd className="figure-mono text-2xl leading-none tracking-[-0.03em]">{stat.value}</dd>
+                  <dd>
+                    <Counter value={stat.value} className="figure-mono text-2xl leading-none tracking-[-0.03em]" />
+                  </dd>
                   <dt className="mt-3 label-mono text-muted-foreground">{stat.label}</dt>
                 </div>
               ))}
@@ -135,15 +138,17 @@ export default function HomePage() {
             ))}
           </dl>
         </Shell>
-        <div className="flex w-max animate-marquee items-center py-5">
-          {[...CLIENT_LOGOS, ...CLIENT_LOGOS].map((logo, i) => (
-            <span
-              key={`${logo}-${i}`}
-              className="px-8 font-sans text-lg font-semibold uppercase tracking-[0.08em] whitespace-nowrap text-muted-foreground/70"
-            >
-              {logo}
-            </span>
-          ))}
+        <div className="marquee-hold">
+          <div className="flex w-max animate-marquee items-center py-5">
+            {[...CLIENT_LOGOS, ...CLIENT_LOGOS].map((logo, i) => (
+              <span
+                key={`${logo}-${i}`}
+                className="px-8 font-sans text-lg font-semibold uppercase tracking-[0.08em] whitespace-nowrap text-muted-foreground/70 transition-colors duration-300 hover:text-foreground"
+              >
+                {logo}
+              </span>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -159,8 +164,13 @@ export default function HomePage() {
           />
 
           <div className="mt-10 grid border-t border-l border-border md:grid-cols-2 xl:grid-cols-4">
-            {ENGINE_STEPS.map((step) => (
-              <article key={step.step} className="flex flex-col border-r border-b border-border p-6 sm:p-8">
+            {ENGINE_STEPS.map((step, i) => (
+              <Reveal
+                key={step.step}
+                as="article"
+                delay={i * 80}
+                className="flex flex-col border-r border-b border-border p-6 transition-colors duration-300 hover:bg-card sm:p-8"
+              >
                 <div className="flex items-baseline justify-between">
                   <span className="figure-mono text-4xl leading-none tracking-[-0.04em] text-accent">{step.step}</span>
                   <span className="label-mono text-muted-foreground">Step</span>
@@ -175,7 +185,7 @@ export default function HomePage() {
                     </li>
                   ))}
                 </ul>
-              </article>
+              </Reveal>
             ))}
           </div>
 
@@ -184,7 +194,7 @@ export default function HomePage() {
               <Link
                 key={service.slug}
                 href={`/services/${service.slug}`}
-                className="group flex items-center justify-between gap-3 border border-border px-5 py-4 transition-colors hover:border-foreground hover:bg-foreground hover:text-background"
+                className="press group flex items-center justify-between gap-3 border border-border px-5 py-4 transition-colors hover:border-foreground hover:bg-foreground hover:text-background"
               >
                 <span className="text-sm font-medium">{service.title}</span>
                 <ArrowUpRight className="size-4 shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -241,11 +251,17 @@ export default function HomePage() {
                 'Cancel any time after the 60-day cycle',
                 'All accounts, files and containers stay yours',
                 'Weekly decision log, shared dashboard access',
-              ].map((item) => (
-                <li key={item} className="flex items-start gap-3 border-b border-background/25 p-5 text-sm last:border-b-0">
+              ].map((item, i) => (
+                <Reveal
+                  key={item}
+                  as="li"
+                  delay={i * 70}
+                  variant="left"
+                  className="flex items-start gap-3 border-b border-background/25 p-5 text-sm last:border-b-0"
+                >
                   <Check className="mt-0.5 size-4 shrink-0 text-accent" />
                   {item}
-                </li>
+                </Reveal>
               ))}
             </ul>
           </div>

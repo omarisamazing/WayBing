@@ -142,6 +142,12 @@
   animation: marquee 40s linear infinite;
 }
 
+/* Let people stop the belt to actually read an item. */
+.marquee-hold:hover .animate-marquee,
+.marquee-hold:focus-within .animate-marquee {
+  animation-play-state: paused;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-marquee {
     animation: none;
@@ -195,6 +201,36 @@
   transform-origin: bottom;
   animation: grow-bar 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
   animation-delay: var(--rise-delay, 0ms);
+}
+
+/* Scroll-triggered bars. Transform + one class flip — no layout work. */
+.bar {
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition:
+    transform 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 0.25s ease;
+  transition-delay: var(--d, 0ms);
+}
+
+.bar[data-visible='true'] {
+  transform: none;
+}
+
+.bar:hover {
+  background-color: var(--accent);
+}
+
+/* Horizontal share meter. Scales instead of animating width. */
+.meter {
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--d, 0ms);
+}
+
+.meter[data-visible='true'] {
+  transform: none;
 }
 
 /* ---------- scroll reveal ---------- */
@@ -284,6 +320,48 @@
   box-shadow: 0 12px 32px -18px color-mix(in oklab, var(--foreground) 45%, transparent);
 }
 
+/* ---------- pointer companion (see components/site/cursor.tsx) ---------- */
+
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 60;
+  width: 26px;
+  height: 26px;
+  border: 1px solid color-mix(in oklab, var(--accent) 65%, transparent);
+  opacity: 0;
+  pointer-events: none;
+  will-change: transform;
+  transition:
+    opacity 0.25s ease,
+    background-color 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.cursor-ring[data-on='true'] {
+  opacity: 1;
+}
+
+.cursor-ring[data-hot='true'] {
+  background-color: color-mix(in oklab, var(--accent) 14%, transparent);
+  border-color: var(--accent);
+}
+
+/* ---------- tactile press feedback ---------- */
+
+/* Unlayered, so it owns the transition for pressable elements and colour +
+   transform stay in sync instead of one utility clobbering the other. */
+.press {
+  transition-property: color, background-color, border-color, transform;
+  transition-duration: 260ms;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.press:active {
+  transform: scale(0.975);
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -299,13 +377,22 @@
   .grow-bar {
     animation: none;
   }
+  .bar,
+  .meter {
+    transform: none !important;
+    transition: none !important;
+  }
   .link-sweep::after {
     transition: none;
   }
   .animate-signal {
     animation: none;
   }
-  .lift:hover {
+  .lift:hover,
+  .press:active {
     transform: none;
+  }
+  .cursor-ring {
+    display: none;
   }
 }

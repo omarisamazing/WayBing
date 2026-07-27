@@ -1,3 +1,4 @@
+import { Counter } from '@/components/site/motion'
 import { Reveal } from '@/components/site/reveal'
 import { cn } from '@/lib/utils'
 
@@ -48,9 +49,10 @@ export function Stat({
 }) {
   return (
     <div className={cn('flex flex-col gap-2 px-4 py-6 sm:px-6', className)}>
-      <span className="figure-mono text-[clamp(1.5rem,3vw,2.25rem)] font-medium leading-none tracking-[-0.03em]">
-        {value}
-      </span>
+      <Counter
+        value={value}
+        className="figure-mono text-[clamp(1.5rem,3vw,2.25rem)] font-medium leading-none tracking-[-0.03em]"
+      />
       <span className="label-mono text-muted-foreground">{label}</span>
     </div>
   )

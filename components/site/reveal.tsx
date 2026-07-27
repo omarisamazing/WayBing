@@ -1,29 +1,7 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useInView } from '@/components/site/motion'
 import { cn } from '@/lib/utils'
-
-/**
- * One IntersectionObserver is shared by every <Reveal> on the page instead of
- * one per element — the whole site costs a single observer.
- */
-const callbacks = new WeakMap<Element, () => void>()
-let sharedObserver: IntersectionObserver | null = null
-
-function getObserver() {
-  sharedObserver ??= new IntersectionObserver(
-    (entries) => {
-      for (const entry of entries) {
-        if (!entry.isIntersecting) continue
-        callbacks.get(entry.target)?.()
-        callbacks.delete(entry.target)
-        sharedObserver?.unobserve(entry.target)
-      }
-    },
-    { rootMargin: '0px 0px -12% 0px', threshold: 0.05 },
-  )
-  return sharedObserver
-}
 
 const VARIANTS = {
   up: '',
@@ -43,24 +21,13 @@ type RevealProps = {
   id?: string
 }
 
-/** Fades its children in once they scroll into view. Reduced motion is handled in CSS. */
+/**
+ * Fades its children in once they scroll into view. Shares a single
+ * IntersectionObserver with every other animation on the page; reduced motion
+ * is handled in CSS.
+ */
 export function Reveal({ children, className, delay = 0, variant = 'up', as = 'div', id }: RevealProps) {
-  const ref = useRef<HTMLDivElement>(null)
-  const [visible, setVisible] = useState(false)
-
-  useEffect(() => {
-    const node = ref.current
-    if (!node) return
-
-    callbacks.set(node, () => setVisible(true))
-    getObserver().observe(node)
-
-    return () => {
-      callbacks.delete(node)
-      sharedObserver?.unobserve(node)
-    }
-  }, [])
-
+  const [ref, visible] = useInView<HTMLDivElement>()
   const Tag = as as React.ElementType<React.ComponentPropsWithRef<'div'>>
 
   return (

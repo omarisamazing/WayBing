@@ -25,7 +25,7 @@ export function CtaButton({ children = 'Request a meeting', intent, variant = 's
       type="button"
       onClick={() => open(intent)}
       className={cn(
-        'group inline-flex items-center justify-center gap-2 border font-mono uppercase tracking-[0.14em] transition-colors',
+        'press group inline-flex items-center justify-center gap-2 border font-mono uppercase tracking-[0.14em]',
         sizes[size],
         variant === 'solid'
           ? 'border-foreground bg-foreground text-background hover:border-accent hover:bg-accent hover:text-accent-foreground'
