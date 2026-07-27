@@ -6,6 +6,7 @@ import { useState } from 'react'
 import { Menu, X } from 'lucide-react'
 import { Logo } from '@/components/site/logo'
 import { CtaButton } from '@/components/site/cta-button'
+import { ScrollProgress } from '@/components/site/scroll-progress'
 import { NAV_LINKS } from '@/lib/content'
 import { cn } from '@/lib/utils'
 
@@ -55,14 +56,15 @@ export function SiteNav() {
       </div>
 
       {open ? (
-        <div className="border-t border-border md:hidden">
+        <div className="anim-fade overflow-hidden border-t border-border md:hidden">
           <nav aria-label="Mobile" className="flex flex-col">
-            {NAV_LINKS.map((link) => (
+            {NAV_LINKS.map((link, i) => (
               <Link
                 key={link.href}
                 href={link.href}
                 onClick={() => setOpen(false)}
-                className="border-b border-border px-4 py-3.5 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground"
+                style={{ animationDelay: `${i * 45}ms` }}
+                className="anim-rise border-b border-border px-4 py-3.5 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
               >
                 {link.label}
               </Link>
@@ -73,6 +75,8 @@ export function SiteNav() {
           </div>
         </div>
       ) : null}
+
+      <ScrollProgress />
     </header>
   )
 }

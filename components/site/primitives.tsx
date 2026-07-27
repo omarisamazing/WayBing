@@ -1,3 +1,5 @@
+import { CountUp } from '@/components/site/count-up'
+import { Reveal } from '@/components/site/reveal'
 import { cn } from '@/lib/utils'
 
 export function Shell({ className, children }: { className?: string; children: React.ReactNode }) {
@@ -19,14 +21,18 @@ export function SectionHead({
 }) {
   return (
     <div className={cn('flex flex-col gap-4 border-b border-border pb-6 md:flex-row md:items-end md:justify-between', className)}>
-      <div className="max-w-3xl">
+      <Reveal className="max-w-3xl">
         <p className="label-mono text-muted-foreground">
           {index ? <span className="text-accent">{index} / </span> : null}
           {label}
         </p>
         <h2 className="display-tight mt-4 text-[clamp(2rem,5vw,3.75rem)] text-balance">{title}</h2>
-      </div>
-      {intro ? <p className="max-w-sm text-sm leading-relaxed text-muted-foreground md:text-right">{intro}</p> : null}
+      </Reveal>
+      {intro ? (
+        <Reveal delay={120} as="p" className="max-w-sm text-sm leading-relaxed text-muted-foreground md:text-right">
+          {intro}
+        </Reveal>
+      ) : null}
     </div>
   )
 }
@@ -42,7 +48,9 @@ export function Stat({
 }) {
   return (
     <div className={cn('flex flex-col gap-2 px-4 py-6 sm:px-6', className)}>
-      <span className="font-mono text-[clamp(1.5rem,3vw,2.25rem)] font-medium leading-none tracking-[-0.03em]">{value}</span>
+      <span className="font-mono text-[clamp(1.5rem,3vw,2.25rem)] font-medium leading-none tracking-[-0.03em]">
+        <CountUp value={value} />
+      </span>
       <span className="label-mono text-muted-foreground">{label}</span>
     </div>
   )

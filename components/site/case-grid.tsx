@@ -21,10 +21,10 @@ export function CaseGrid() {
               type="button"
               onClick={() => setActive(filter)}
               aria-pressed={isActive}
-              className={`border px-4 py-2 font-mono text-[11px] uppercase tracking-[0.12em] transition-colors ${
+              className={`border px-4 py-2 font-mono text-[11px] uppercase tracking-[0.12em] transition-all duration-200 active:scale-[0.97] ${
                 isActive
                   ? 'border-foreground bg-foreground text-background'
-                  : 'border-border text-muted-foreground hover:border-foreground hover:text-foreground'
+                  : 'border-border text-muted-foreground hover:-translate-y-0.5 hover:border-foreground hover:text-foreground'
               }`}
             >
               {filter}
@@ -36,12 +36,13 @@ export function CaseGrid() {
         })}
       </div>
 
-      <div className="mt-8 grid gap-4 lg:grid-cols-2">
-        {studies.map((study) => (
+      <div key={active} className="mt-8 grid gap-4 lg:grid-cols-2">
+        {studies.map((study, i) => (
           <Link
             key={study.slug}
             href={`/work/${study.slug}`}
-            className="group flex flex-col border border-border transition-colors hover:border-foreground"
+            style={{ animationDelay: `${i * 70}ms` }}
+            className="group anim-rise flex flex-col border border-border transition-[border-color,transform,box-shadow] duration-300 hover:-translate-y-1 hover:border-foreground hover:shadow-[6px_6px_0_0_var(--accent)]"
           >
             <div className="flex items-center justify-between gap-4 border-b border-border px-6 py-4">
               <p className="label-mono text-accent">{study.category}</p>
@@ -63,7 +64,10 @@ export function CaseGrid() {
                     <dt className="label-mono text-muted-foreground">{item.label}</dt>
                     <dd className="mt-2 flex flex-wrap items-baseline gap-1.5 font-mono text-sm">
                       <span className="text-muted-foreground line-through decoration-muted-foreground/40">{item.value}</span>
-                      <ArrowRight className="size-3 shrink-0 text-accent" aria-hidden="true" />
+                      <ArrowRight
+                        className="size-3 shrink-0 text-accent transition-transform duration-300 group-hover:translate-x-0.5"
+                        aria-hidden="true"
+                      />
                       <span className="font-medium">{study.after[i].value}</span>
                     </dd>
                   </div>

@@ -27,10 +27,10 @@ export function PostList() {
               type="button"
               onClick={() => setActive(category)}
               aria-pressed={isActive}
-              className={`border px-4 py-2 font-mono text-[11px] uppercase tracking-[0.12em] transition-colors ${
+              className={`border px-4 py-2 font-mono text-[11px] uppercase tracking-[0.12em] transition-all duration-200 active:scale-[0.97] ${
                 isActive
                   ? 'border-foreground bg-foreground text-background'
-                  : 'border-border text-muted-foreground hover:border-foreground hover:text-foreground'
+                  : 'border-border text-muted-foreground hover:-translate-y-0.5 hover:border-foreground hover:text-foreground'
               }`}
             >
               {category}
@@ -42,7 +42,7 @@ export function PostList() {
       {featured ? (
         <Link
           href={`/blog/${featured.slug}`}
-          className="group mt-8 grid border border-foreground transition-colors hover:bg-muted lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]"
+          className="group anim-rise mt-8 grid border border-foreground transition-[background-color,box-shadow] duration-300 hover:bg-muted hover:shadow-[8px_8px_0_0_var(--accent)] lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]"
         >
           <div className="p-6 sm:p-10">
             <div className="flex flex-wrap items-center gap-x-4 gap-y-2 label-mono">
@@ -69,12 +69,13 @@ export function PostList() {
         </Link>
       ) : null}
 
-      <div className="mt-4 grid border-t border-l border-border md:grid-cols-2 xl:grid-cols-3">
-        {rest.map((post) => (
+      <div key={active} className="mt-4 grid border-t border-l border-border md:grid-cols-2 xl:grid-cols-3">
+        {rest.map((post, i) => (
           <Link
             key={post.slug}
             href={`/blog/${post.slug}`}
-            className="group flex flex-col justify-between border-r border-b border-border p-6 transition-colors hover:bg-muted sm:p-8"
+            style={{ animationDelay: `${i * 60}ms` }}
+            className="group anim-rise relative flex flex-col justify-between border-r border-b border-border p-6 transition-colors duration-300 hover:bg-muted sm:p-8"
           >
             <div>
               <div className="flex items-center justify-between gap-4 label-mono">

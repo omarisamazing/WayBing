@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { ArrowUpRight, Check, Clock, User } from 'lucide-react'
 import { useBooking } from '@/components/site/booking-provider'
 import { Shell, SectionHead } from '@/components/site/primitives'
+import { Reveal } from '@/components/site/reveal'
 import { BOOKING_OPTIONS } from '@/lib/content'
 import { cn } from '@/lib/utils'
 
@@ -22,7 +23,7 @@ export function BookingSection({ index = '06' }: { index?: string }) {
           intro="Three formats with three different hosts. Pick the one you need and the calendar switches to match."
         />
 
-        <div className="mt-10 border border-foreground">
+        <Reveal className="mt-10 border border-foreground">
           <div role="tablist" aria-label="Call formats" className="grid sm:grid-cols-3">
             {BOOKING_OPTIONS.map((option, i) => {
               const selected = option.id === tab
@@ -34,7 +35,7 @@ export function BookingSection({ index = '06' }: { index?: string }) {
                   aria-selected={selected}
                   onClick={() => setTab(option.id)}
                   className={cn(
-                    'flex flex-col gap-2 border-border px-5 py-5 text-left transition-colors not-last:border-b sm:not-last:border-b-0 sm:not-last:border-r',
+                    'flex flex-col gap-2 border-border px-5 py-5 text-left transition-colors duration-300 not-last:border-b sm:not-last:border-b-0 sm:not-last:border-r',
                     selected ? 'bg-foreground text-background' : 'hover:bg-muted'
                   )}
                 >
@@ -48,8 +49,8 @@ export function BookingSection({ index = '06' }: { index?: string }) {
           </div>
 
           <div className="grid border-t border-foreground lg:grid-cols-[minmax(0,1fr)_minmax(0,22rem)]">
-            <div className="p-6 sm:p-10">
-              <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-muted-foreground">
+            <div key={active.id} className="p-6 sm:p-10">
+              <div className="anim-fade flex flex-wrap items-center gap-x-6 gap-y-2 text-muted-foreground">
                 <span className="inline-flex items-center gap-2 label-mono">
                   <Clock className="size-3" /> {active.duration}
                 </span>
@@ -57,10 +58,14 @@ export function BookingSection({ index = '06' }: { index?: string }) {
                   <User className="size-3" /> Hosted by {active.host}
                 </span>
               </div>
-              <p className="mt-5 max-w-xl text-xl leading-snug text-pretty">{active.focus}</p>
+              <p className="anim-rise delay-1 mt-5 max-w-xl text-xl leading-snug text-pretty">{active.focus}</p>
               <ul className="mt-7 flex flex-col gap-3 border-t border-border pt-6">
-                {active.bullets.map((b) => (
-                  <li key={b} className="flex items-center gap-3 text-sm">
+                {active.bullets.map((b, i) => (
+                  <li
+                    key={b}
+                    style={{ animationDelay: `${120 + i * 70}ms` }}
+                    className="anim-rise flex items-center gap-3 text-sm"
+                  >
                     <Check className="size-4 shrink-0 text-accent" />
                     {b}
                   </li>
@@ -96,7 +101,7 @@ export function BookingSection({ index = '06' }: { index?: string }) {
               </button>
             </div>
           </div>
-        </div>
+        </Reveal>
       </Shell>
     </section>
   )
