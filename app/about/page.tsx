@@ -57,7 +57,7 @@ export default function AboutPage() {
           <div className="mt-10 grid border-t border-l border-border lg:grid-cols-3">
             {PRINCIPLES.map((principle) => (
               <article key={principle.index} className="border-r border-b border-border p-6 sm:p-8">
-                <span className="font-mono text-4xl leading-none tracking-[-0.04em] text-accent">{principle.index}</span>
+                <span className="figure-mono text-4xl leading-none tracking-[-0.04em] text-accent">{principle.index}</span>
                 <h3 className="mt-8 text-2xl font-semibold uppercase tracking-[-0.02em] text-balance">{principle.title}</h3>
                 <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{principle.body}</p>
               </article>

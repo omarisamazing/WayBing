@@ -48,7 +48,9 @@ export function Stat({
 }) {
   return (
     <div className={cn('flex flex-col gap-2 px-4 py-6 sm:px-6', className)}>
-      <span className="font-mono text-[clamp(1.5rem,3vw,2.25rem)] font-medium leading-none tracking-[-0.03em]">{value}</span>
+      <span className="figure-mono text-[clamp(1.5rem,3vw,2.25rem)] font-medium leading-none tracking-[-0.03em]">
+        {value}
+      </span>
       <span className="label-mono text-muted-foreground">{label}</span>
     </div>
   )

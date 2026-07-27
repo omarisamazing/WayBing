@@ -36,10 +36,10 @@ export default function HomePage() {
               <span className="text-accent">✳</span> Performance marketing & growth design
             </p>
             <h1 className="rise rise-1 display-tight mt-6 text-[clamp(2.75rem,8.5vw,7rem)] text-balance">
-              We don&apos;t sell
-              <br />
-              retainers. We build
-              <br />
+              We don&rsquo;t sell{' '}
+              <br className="hidden sm:block" />
+              retainers. We build{' '}
+              <br className="hidden sm:block" />
               <span className="text-accent">revenue engines.</span>
             </h1>
             <p className="rise rise-2 mt-8 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
@@ -65,7 +65,7 @@ export default function HomePage() {
                 <p className="label-mono text-muted-foreground">Live account snapshot</p>
                 <LogoMark className="h-3 text-accent" />
               </div>
-              <p className="mt-5 font-mono text-[clamp(2rem,4vw,2.75rem)] leading-none tracking-[-0.04em]">$84.6M</p>
+              <p className="figure-mono mt-5 text-[clamp(2rem,4vw,2.75rem)] leading-none tracking-[-0.04em]">$84.6M</p>
               <p className="mt-3 label-mono text-muted-foreground">Tracked client revenue since 2019</p>
             </div>
 
@@ -109,7 +109,7 @@ export default function HomePage() {
                   key={stat.label}
                   className="border-border p-6 [&:not(:nth-last-child(-n+2))]:border-b [&:nth-child(odd)]:border-r"
                 >
-                  <dd className="font-mono text-2xl leading-none tracking-[-0.03em]">{stat.value}</dd>
+                  <dd className="figure-mono text-2xl leading-none tracking-[-0.03em]">{stat.value}</dd>
                   <dt className="mt-3 label-mono text-muted-foreground">{stat.label}</dt>
                 </div>
               ))}
@@ -162,7 +162,7 @@ export default function HomePage() {
             {ENGINE_STEPS.map((step) => (
               <article key={step.step} className="flex flex-col border-r border-b border-border p-6 sm:p-8">
                 <div className="flex items-baseline justify-between">
-                  <span className="font-mono text-4xl leading-none tracking-[-0.04em] text-accent">{step.step}</span>
+                  <span className="figure-mono text-4xl leading-none tracking-[-0.04em] text-accent">{step.step}</span>
                   <span className="label-mono text-muted-foreground">Step</span>
                 </div>
                 <h3 className="mt-8 text-2xl font-semibold uppercase tracking-[-0.02em]">{step.title}</h3>

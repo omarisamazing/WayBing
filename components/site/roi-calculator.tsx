@@ -50,7 +50,7 @@ export function RoiCalculator() {
                 <label htmlFor="spend" className="label-mono text-muted-foreground">
                   Current monthly ad spend
                 </label>
-                <output htmlFor="spend" className="font-mono text-2xl tracking-[-0.03em]">
+                <output htmlFor="spend" className="figure-mono text-2xl tracking-[-0.03em]">
                   {currency(spend)}
                 </output>
               </div>
@@ -76,7 +76,7 @@ export function RoiCalculator() {
                 <label htmlFor="roas" className="label-mono text-muted-foreground">
                   Current blended ROAS
                 </label>
-                <output htmlFor="roas" className="font-mono text-2xl tracking-[-0.03em]">
+                <output htmlFor="roas" className="figure-mono text-2xl tracking-[-0.03em]">
                   {roas.toFixed(1)}x
                 </output>
               </div>
@@ -101,11 +101,11 @@ export function RoiCalculator() {
             <dl className="grid grid-cols-2 border-t border-border pt-6">
               <div className="pr-4">
                 <dt className="label-mono text-muted-foreground">Revenue today</dt>
-                <dd className="mt-2 font-mono text-lg">{currency(current)}</dd>
+                <dd className="figure-mono mt-2 text-lg">{currency(current)}</dd>
               </div>
               <div className="border-l border-border pl-4">
                 <dt className="label-mono text-muted-foreground">At 3.5x benchmark</dt>
-                <dd className="mt-2 font-mono text-lg">{currency(benchmarked)}</dd>
+                <dd className="figure-mono mt-2 text-lg">{currency(benchmarked)}</dd>
               </div>
             </dl>
           </div>
@@ -113,7 +113,7 @@ export function RoiCalculator() {
           <div className="flex flex-col justify-between gap-8 bg-foreground p-6 text-background sm:p-10">
             <div>
               <p className="label-mono text-background/50">Monthly revenue gap</p>
-              <p className="mt-4 font-mono text-[clamp(2.5rem,7vw,4.5rem)] font-medium leading-[0.9] tracking-[-0.04em] text-accent">
+              <p className="figure-mono mt-4 text-[clamp(2.5rem,7vw,4.5rem)] font-medium leading-[0.9] tracking-[-0.04em] text-accent">
                 {currency(gap)}
               </p>
               <p className="mt-5 max-w-md text-sm leading-relaxed text-background/70">
@@ -125,10 +125,13 @@ export function RoiCalculator() {
               <div className="mt-8">
                 <div className="flex items-center justify-between label-mono text-background/50">
                   <span>Progress to benchmark</span>
-                  <span className="text-accent">{pct.toFixed(0)}%</span>
+                  <span className="tabular-nums text-accent">{pct.toFixed(0)}%</span>
                 </div>
                 <div className="mt-2 h-2 w-full bg-background/15">
-                  <div className="h-full bg-accent transition-[width] duration-300" style={{ width: `${pct}%` }} />
+                  <div
+                    className="h-full bg-accent transition-[width] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none"
+                    style={{ width: `${pct}%` }}
+                  />
                 </div>
               </div>
             </div>

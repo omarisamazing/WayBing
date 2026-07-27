@@ -55,13 +55,13 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
                 <div className="mt-7 flex flex-col gap-4">
                   <div className="flex items-baseline justify-between gap-4 border-b border-border pb-4">
                     <span className="label-mono text-muted-foreground">Before</span>
-                    <span className="font-mono text-2xl leading-none tracking-[-0.03em] text-muted-foreground line-through decoration-muted-foreground/40">
+                    <span className="figure-mono text-2xl leading-none tracking-[-0.03em] text-muted-foreground line-through decoration-muted-foreground/40">
                       {item.value}
                     </span>
                   </div>
                   <div className="flex items-baseline justify-between gap-4">
                     <span className="label-mono text-accent">After</span>
-                    <span className="font-mono text-[clamp(1.75rem,3vw,2.5rem)] font-medium leading-none tracking-[-0.04em]">
+                    <span className="figure-mono text-[clamp(1.75rem,3vw,2.5rem)] font-medium leading-none tracking-[-0.04em]">
                       {study.after[i].value}
                     </span>
                   </div>

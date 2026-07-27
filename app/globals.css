@@ -76,6 +76,22 @@
   body {
     @apply bg-background text-foreground font-sans;
     font-feature-settings: 'ss01', 'cv01';
+    /* Slightly negative tracking reads calmer at body sizes in Instrument Sans. */
+    letter-spacing: -0.006em;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-optical-sizing: auto;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+  }
+  p,
+  li {
+    text-wrap: pretty;
   }
   ::selection {
     background: var(--accent);
@@ -85,10 +101,27 @@
 
 @utility label-mono {
   @apply font-mono text-[10px] uppercase tracking-[0.18em] leading-none;
+  font-variant-numeric: tabular-nums;
 }
 
 @utility display-tight {
-  @apply font-sans font-semibold uppercase tracking-[-0.03em] leading-[0.88];
+  @apply font-sans font-semibold uppercase tracking-[-0.03em] leading-[0.9];
+  /* Uppercase display copy needs the counters opened up a touch to avoid clogging. */
+  font-feature-settings: 'ss01', 'cv01', 'case';
+  font-optical-sizing: auto;
+}
+
+/* Numeric figures that must not jitter while values animate or update. */
+@utility figure-mono {
+  @apply font-mono;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Long-form paragraphs: comfortable measure, relaxed rhythm. */
+@utility copy-relaxed {
+  @apply leading-relaxed;
+  letter-spacing: -0.003em;
+  max-width: 68ch;
 }
 
 @utility hairline-grid {

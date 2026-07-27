@@ -123,7 +123,7 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
                 href={`/services/${item.slug}`}
                 className="group flex flex-col justify-between gap-8 border border-border p-6 transition-colors hover:border-foreground hover:bg-foreground hover:text-background"
               >
-                <span className="font-mono text-2xl leading-none tracking-[-0.04em] text-accent">{item.index}</span>
+                <span className="figure-mono text-2xl leading-none tracking-[-0.04em] text-accent">{item.index}</span>
                 <span>
                   <span className="block text-base font-semibold">{item.title}</span>
                   <span className="mt-2 flex items-center gap-2 label-mono opacity-70">

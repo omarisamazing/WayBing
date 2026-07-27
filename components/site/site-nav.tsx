@@ -33,15 +33,15 @@ export function SiteNav() {
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  'group relative flex items-center overflow-hidden border-l border-border px-5 font-mono text-[11px] uppercase tracking-[0.14em] transition-colors last:border-r',
-                  active ? 'bg-foreground text-background' : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                  'group relative flex items-center px-4 font-mono text-[11px] uppercase tracking-[0.14em] transition-colors duration-300 outline-none lg:px-5',
+                  active ? 'text-foreground' : 'text-muted-foreground hover:text-foreground focus-visible:text-foreground'
                 )}
               >
                 <span
                   aria-hidden="true"
                   className={cn(
-                    'absolute inset-x-0 top-0 h-[2px] bg-accent transition-transform duration-300 ease-out',
-                    active ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
+                    'absolute inset-x-4 bottom-[-1px] h-[2px] origin-left bg-accent transition-transform duration-300 ease-out lg:inset-x-5',
+                    active ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100 group-focus-visible:scale-x-100'
                   )}
                 />
                 {link.label}

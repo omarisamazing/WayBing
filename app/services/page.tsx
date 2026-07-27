@@ -48,7 +48,7 @@ export default function ServicesPage() {
                 href={`/services/${service.slug}`}
                 className="group grid items-start gap-6 border-b border-border py-8 transition-colors hover:bg-muted lg:grid-cols-[6rem_minmax(0,1.1fr)_minmax(0,1fr)_auto] lg:gap-10 lg:px-4"
               >
-                <span className="font-mono text-4xl leading-none tracking-[-0.04em] text-accent">{service.index}</span>
+                <span className="figure-mono text-4xl leading-none tracking-[-0.04em] text-accent">{service.index}</span>
 
                 <div>
                   <h3 className="text-2xl font-semibold uppercase tracking-[-0.02em] text-balance sm:text-3xl">
@@ -60,7 +60,7 @@ export default function ServicesPage() {
                 <dl className="flex flex-wrap gap-x-8 gap-y-4">
                   {service.metrics.map((metric) => (
                     <div key={metric.label}>
-                      <dd className="font-mono text-xl leading-none tracking-[-0.03em]">{metric.value}</dd>
+                      <dd className="figure-mono text-xl leading-none tracking-[-0.03em]">{metric.value}</dd>
                       <dt className="mt-2 label-mono text-muted-foreground">{metric.label}</dt>
                     </div>
                   ))}
@@ -88,7 +88,7 @@ export default function ServicesPage() {
             {ENGINE_STEPS.map((step) => (
               <li key={step.step} className="border-r border-b border-border bg-background p-6 sm:p-8">
                 <div className="flex items-baseline justify-between">
-                  <span className="font-mono text-3xl leading-none tracking-[-0.04em] text-accent">{step.step}</span>
+                  <span className="figure-mono text-3xl leading-none tracking-[-0.04em] text-accent">{step.step}</span>
                   <span className="label-mono text-muted-foreground">Phase</span>
                 </div>
                 <h3 className="mt-8 text-xl font-semibold uppercase tracking-[-0.01em]">{step.title}</h3>

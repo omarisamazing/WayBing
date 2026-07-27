@@ -22,14 +22,14 @@ export function CaseGrid() {
               type="button"
               onClick={() => setActive(filter)}
               aria-pressed={isActive}
-              className={`border px-4 py-2 font-mono text-[11px] uppercase tracking-[0.12em] transition-colors ${
+              className={`border px-4 py-2 font-mono text-[11px] uppercase tracking-[0.12em] transition-[color,background-color,border-color] duration-300 ease-out ${
                 isActive
                   ? 'border-foreground bg-foreground text-background'
                   : 'border-border text-muted-foreground hover:border-foreground hover:text-foreground'
               }`}
             >
               {filter}
-              <span className="ml-2 opacity-50">
+              <span className="ml-2 tabular-nums opacity-50">
                 {filter === 'All' ? CASE_STUDIES.length : CASE_STUDIES.filter((s) => s.category === filter).length}
               </span>
             </button>
@@ -62,7 +62,7 @@ export function CaseGrid() {
                 {study.before.map((item, i) => (
                   <div key={item.label}>
                     <dt className="label-mono text-muted-foreground">{item.label}</dt>
-                    <dd className="mt-2 flex flex-wrap items-baseline gap-1.5 font-mono text-sm">
+                    <dd className="figure-mono mt-2 flex flex-wrap items-baseline gap-1.5 text-sm">
                       <span className="text-muted-foreground line-through decoration-muted-foreground/40">{item.value}</span>
                       <ArrowRight className="size-3 shrink-0 text-accent" aria-hidden="true" />
                       <span className="font-medium">{study.after[i].value}</span>

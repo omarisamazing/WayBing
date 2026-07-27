@@ -32,10 +32,15 @@ export function FaqSection() {
                       aria-expanded={isOpen}
                       aria-controls={`faq-panel-${i}`}
                       onClick={() => setOpenIndex(isOpen ? null : i)}
-                      className="group flex w-full items-start justify-between gap-6 py-5 text-left transition-colors hover:text-accent"
+                      className="group flex w-full items-start justify-between gap-6 py-5 text-left transition-colors duration-300 hover:text-accent focus-visible:text-accent"
                     >
                       <span className="flex items-start gap-4">
-                        <span className="mt-1 label-mono text-muted-foreground">
+                        <span
+                          className={cn(
+                            'mt-1 label-mono transition-colors duration-300',
+                            isOpen ? 'text-accent' : 'text-muted-foreground group-hover:text-accent'
+                          )}
+                        >
                           {String(i + 1).padStart(2, '0')}
                         </span>
                         <span className="text-lg font-medium tracking-[-0.01em] text-pretty sm:text-xl">{faq.q}</span>
@@ -71,7 +76,7 @@ export function FaqSection() {
           <aside className="h-fit border border-foreground bg-card p-6">
             <p className="label-mono text-muted-foreground">Still unconvinced</p>
             <p className="mt-4 text-lg leading-snug text-pretty">
-              Book the 15-minute audit. We&apos;ll find the leaks live and you can decide afterwards whether we ever speak
+              Book the 15-minute audit. We&rsquo;ll find the leaks live and you can decide afterwards whether we ever speak
               again.
             </p>
             <CtaButton intent="audit" className="mt-6 w-full">
