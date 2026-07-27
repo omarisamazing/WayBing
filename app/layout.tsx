@@ -1,4 +1,5 @@
 import { Analytics } from '@vercel/analytics/next'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 import type { Metadata, Viewport } from 'next'
 import { Instrument_Sans, JetBrains_Mono } from 'next/font/google'
 import { BookingProvider } from '@/components/site/booking-provider'
@@ -113,6 +114,7 @@ export default function RootLayout({
         {/* Brand entity + website node, present on every URL so Google can merge them. */}
         <JsonLd data={graph(organizationSchema, websiteSchema)} />
         {process.env.NODE_ENV === 'production' && <Analytics />}
+        {process.env.NODE_ENV === 'production' && <SpeedInsights />}
       </body>
     </html>
   )
