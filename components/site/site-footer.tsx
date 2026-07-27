@@ -52,16 +52,25 @@ export function SiteFooter() {
             <div key={col.title}>
               <p className="label-mono text-background/50">{col.title}</p>
               <ul className="mt-4 flex flex-col gap-2.5">
-                {col.links.map((link) => (
-                  <li key={link.label}>
-                    <Link
-                      href={link.href}
-                      className="link-sweep inline-block text-sm text-background/80 transition-colors hover:text-accent"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
+                {col.links.map((link) => {
+                  const isExternal = link.href.startsWith('http')
+                  const className =
+                    'link-sweep inline-block text-sm text-background/80 transition-colors hover:text-accent'
+                  return (
+                    <li key={link.label}>
+                      {isExternal ? (
+                        <a href={link.href} target="_blank" rel="noopener noreferrer" className={className}>
+                          {link.label}
+                          <span className="sr-only"> (opens in a new tab)</span>
+                        </a>
+                      ) : (
+                        <Link href={link.href} className={className}>
+                          {link.label}
+                        </Link>
+                      )}
+                    </li>
+                  )
+                })}
               </ul>
             </div>
           ))}

@@ -7,7 +7,7 @@ import { FaqSection } from '@/components/site/faq-section'
 import { LogoMark } from '@/components/site/logo'
 import { RoiCalculator } from '@/components/site/roi-calculator'
 import { Shell, SectionHead, Stat } from '@/components/site/primitives'
-import { CLIENT_LOGOS, ENGINE_STEPS, HEADLINE_STATS, SERVICES } from '@/lib/content'
+import { CLIENT_LOGOS, ENGINE_STEPS, FAQS, HEADLINE_STATS, SERVICES } from '@/lib/content'
 
 /** Rich-result data for the FAQ block below. Static, so it costs nothing at runtime. */
 const faqSchema = {
