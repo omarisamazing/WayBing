@@ -1,3 +1,4 @@
+import { Reveal } from '@/components/site/reveal'
 import { cn } from '@/lib/utils'
 
 export function Shell({ className, children }: { className?: string; children: React.ReactNode }) {
@@ -18,7 +19,12 @@ export function SectionHead({
   className?: string
 }) {
   return (
-    <div className={cn('flex flex-col gap-4 border-b border-border pb-6 md:flex-row md:items-end md:justify-between', className)}>
+    <Reveal
+      className={cn(
+        'flex flex-col gap-4 border-b border-border pb-6 md:flex-row md:items-end md:justify-between',
+        className
+      )}
+    >
       <div className="max-w-3xl">
         <p className="label-mono text-muted-foreground">
           {index ? <span className="text-accent">{index} / </span> : null}
@@ -27,7 +33,7 @@ export function SectionHead({
         <h2 className="display-tight mt-4 text-[clamp(2rem,5vw,3.75rem)] text-balance">{title}</h2>
       </div>
       {intro ? <p className="max-w-sm text-sm leading-relaxed text-muted-foreground md:text-right">{intro}</p> : null}
-    </div>
+    </Reveal>
   )
 }
 

@@ -28,10 +28,17 @@ export function SiteNav() {
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  'flex items-center border-l border-border px-5 font-mono text-[11px] uppercase tracking-[0.14em] transition-colors last:border-r',
+                  'group relative flex items-center overflow-hidden border-l border-border px-5 font-mono text-[11px] uppercase tracking-[0.14em] transition-colors last:border-r',
                   active ? 'bg-foreground text-background' : 'text-muted-foreground hover:bg-muted hover:text-foreground'
                 )}
               >
+                <span
+                  aria-hidden="true"
+                  className={cn(
+                    'absolute inset-x-0 top-0 h-[2px] bg-accent transition-transform duration-300 ease-out',
+                    active ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
+                  )}
+                />
                 {link.label}
               </Link>
             )
@@ -55,18 +62,25 @@ export function SiteNav() {
       </div>
 
       {open ? (
-        <div className="border-t border-border md:hidden">
+        <div className="border-t border-border duration-200 animate-in fade-in slide-in-from-top-2 md:hidden">
           <nav aria-label="Mobile" className="flex flex-col">
-            {NAV_LINKS.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                onClick={() => setOpen(false)}
-                className="border-b border-border px-4 py-3.5 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground"
-              >
-                {link.label}
-              </Link>
-            ))}
+            {NAV_LINKS.map((link, index) => {
+              const active = pathname === link.href || pathname.startsWith(`${link.href}/`)
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setOpen(false)}
+                  style={{ animationDelay: `${index * 40}ms` }}
+                  className={cn(
+                    'border-b border-border px-4 py-3.5 font-mono text-[11px] uppercase tracking-[0.14em] transition-colors duration-300 animate-in fade-in slide-in-from-left-2 active:bg-muted',
+                    active ? 'border-l-2 border-l-accent text-foreground' : 'text-muted-foreground'
+                  )}
+                >
+                  {link.label}
+                </Link>
+              )
+            })}
           </nav>
           <div className="p-4 sm:hidden">
             <CtaButton className="w-full">Book a call</CtaButton>

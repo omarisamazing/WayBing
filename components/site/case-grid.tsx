@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { ArrowUpRight, ArrowRight } from 'lucide-react'
+import { Reveal } from '@/components/site/reveal'
 import { CASE_FILTERS, CASE_STUDIES } from '@/lib/content'
 
 export function CaseGrid() {
@@ -37,11 +38,11 @@ export function CaseGrid() {
       </div>
 
       <div className="mt-8 grid gap-4 lg:grid-cols-2">
-        {studies.map((study) => (
+        {studies.map((study, index) => (
+          <Reveal key={`${active}-${study.slug}`} delay={index * 70} className="flex">
           <Link
-            key={study.slug}
             href={`/work/${study.slug}`}
-            className="group flex flex-col border border-border transition-colors hover:border-foreground"
+            className="lift group flex flex-1 flex-col border border-border hover:border-foreground"
           >
             <div className="flex items-center justify-between gap-4 border-b border-border px-6 py-4">
               <p className="label-mono text-accent">{study.category}</p>
@@ -76,8 +77,15 @@ export function CaseGrid() {
               <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </span>
           </Link>
+          </Reveal>
         ))}
       </div>
+
+      {studies.length === 0 ? (
+        <p className="mt-4 border border-dashed border-border p-10 text-center text-sm text-muted-foreground">
+          No case studies filed under this discipline yet.
+        </p>
+      ) : null}
     </div>
   )
 }

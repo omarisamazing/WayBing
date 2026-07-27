@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { ArrowUpRight } from 'lucide-react'
+import { Reveal } from '@/components/site/reveal'
 import { POSTS, POST_CATEGORIES } from '@/lib/content'
 
 function formatDate(value: string) {
@@ -40,9 +41,10 @@ export function PostList() {
       </div>
 
       {featured ? (
+        <Reveal key={`${active}-${featured.slug}`} variant="scale" className="mt-8">
         <Link
           href={`/blog/${featured.slug}`}
-          className="group mt-8 grid border border-foreground transition-colors hover:bg-muted lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]"
+          className="lift group grid border border-foreground hover:bg-muted lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]"
         >
           <div className="p-6 sm:p-10">
             <div className="flex flex-wrap items-center gap-x-4 gap-y-2 label-mono">
@@ -67,14 +69,15 @@ export function PostList() {
             ))}
           </div>
         </Link>
+        </Reveal>
       ) : null}
 
       <div className="mt-4 grid border-t border-l border-border md:grid-cols-2 xl:grid-cols-3">
-        {rest.map((post) => (
+        {rest.map((post, index) => (
+          <Reveal key={`${active}-${post.slug}`} delay={index * 60} className="flex">
           <Link
-            key={post.slug}
             href={`/blog/${post.slug}`}
-            className="group flex flex-col justify-between border-r border-b border-border p-6 transition-colors hover:bg-muted sm:p-8"
+            className="group flex flex-1 flex-col justify-between border-r border-b border-border p-6 transition-colors hover:bg-muted sm:p-8"
           >
             <div>
               <div className="flex items-center justify-between gap-4 label-mono">
@@ -89,6 +92,7 @@ export function PostList() {
               <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </div>
           </Link>
+          </Reveal>
         ))}
       </div>
 

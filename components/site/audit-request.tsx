@@ -1,7 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { ArrowRight, Check, Loader2, X } from 'lucide-react'
+import { AlertCircle, ArrowRight, Check, Loader2, X } from 'lucide-react'
+import { submitLead } from '@/app/actions/leads'
 import { cn } from '@/lib/utils'
 
 const BUDGETS = ['< $10k / mo', '$10k – $30k / mo', '$30k – $75k / mo', '$75k+ / mo']
@@ -24,6 +25,8 @@ export function AuditRequest({ className, variant = 'hero' }: { className?: stri
   const [picked, setPicked] = useState<string[]>([SERVICES[2]])
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState<Status>('idle')
+  const [error, setError] = useState<string | null>(null)
+  const [notice, setNotice] = useState<string | null>(null)
 
   function toggleService(service: string) {
     setPicked((prev) => (prev.includes(service) ? prev.filter((s) => s !== service) : [...prev, service]))
@@ -32,8 +35,24 @@ export function AuditRequest({ className, variant = 'hero' }: { className?: stri
   async function submitScope(e: React.FormEvent) {
     e.preventDefault()
     setStatus('sending')
-    console.log('[v0] audit request', { site, budget, bottleneck, picked, email })
-    await new Promise((r) => setTimeout(r, 900))
+    setError(null)
+
+    const result = await submitLead({
+      kind: 'audit',
+      site,
+      email,
+      budget,
+      bottleneck,
+      services: picked,
+    })
+
+    if (!result.ok) {
+      setError(result.message)
+      setStatus('idle')
+      return
+    }
+
+    setNotice(result.pending ? result.message : null)
     setStatus('done')
   }
 
@@ -112,8 +131,8 @@ export function AuditRequest({ className, variant = 'hero' }: { className?: stri
             </div>
 
             {status === 'done' ? (
-              <div className="flex flex-1 flex-col items-center justify-center p-7 text-center">
-                <div className="flex size-10 items-center justify-center border border-foreground bg-foreground text-background">
+              <div className="flex flex-1 flex-col items-center justify-center p-7 text-center duration-300 animate-in fade-in">
+                <div className="flex size-10 items-center justify-center border border-accent bg-accent text-accent-foreground duration-500 animate-in zoom-in-50">
                   <Check className="size-5" />
                 </div>
                 <h3 className="mt-5 text-xl font-semibold uppercase tracking-[-0.02em]">Audit queued</h3>
@@ -121,6 +140,11 @@ export function AuditRequest({ className, variant = 'hero' }: { className?: stri
                   Your leak checklist for <span className="font-mono text-foreground">{site}</span> is being built. Watch{' '}
                   <span className="font-mono text-foreground">{email}</span> — it arrives within 48 hours, no call required.
                 </p>
+                {notice ? (
+                  <p className="mt-4 max-w-sm border border-border bg-muted px-3 py-2 font-mono text-[11px] leading-relaxed text-muted-foreground">
+                    {notice}
+                  </p>
+                ) : null}
                 <button
                   type="button"
                   onClick={() => setOpenPanel(false)}
@@ -203,8 +227,17 @@ export function AuditRequest({ className, variant = 'hero' }: { className?: stri
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@company.com"
-                    className="h-12 border border-border bg-card px-3 font-mono text-sm outline-none focus:border-foreground"
+                    className="h-12 border border-border bg-card px-3 font-mono text-sm outline-none transition-colors focus:border-accent"
                   />
+                  {error ? (
+                    <p
+                      role="alert"
+                      className="flex items-start gap-2 border border-destructive/40 bg-destructive/5 px-3 py-2.5 text-xs leading-relaxed text-destructive duration-200 animate-in fade-in slide-in-from-top-1"
+                    >
+                      <AlertCircle className="mt-px size-3.5 shrink-0" />
+                      {error}
+                    </p>
+                  ) : null}
                   <button
                     type="submit"
                     disabled={status === 'sending'}

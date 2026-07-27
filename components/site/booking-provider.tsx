@@ -1,7 +1,8 @@
 'use client'
 
 import { createContext, useCallback, useContext, useMemo, useState } from 'react'
-import { ArrowRight, Check, Clock, User } from 'lucide-react'
+import { AlertCircle, ArrowRight, Check, Clock, Loader2, User } from 'lucide-react'
+import { submitLead } from '@/app/actions/leads'
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { BOOKING_OPTIONS } from '@/lib/content'
@@ -28,16 +29,49 @@ export function BookingProvider({ children }: { children: React.ReactNode }) {
   const [day, setDay] = useState<string | null>(null)
   const [slot, setSlot] = useState<string | null>(null)
   const [email, setEmail] = useState('')
+  const [company, setCompany] = useState('')
   const [confirmed, setConfirmed] = useState(false)
+  const [sending, setSending] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [notice, setNotice] = useState<string | null>(null)
 
   const open = useCallback((nextIntent?: string) => {
     if (nextIntent) setIntent(nextIntent)
     setConfirmed(false)
+    setError(null)
     setIsOpen(true)
   }, [])
 
   const value = useMemo(() => ({ open }), [open])
   const active = BOOKING_OPTIONS.find((o) => o.id === intent) ?? BOOKING_OPTIONS[1]
+
+  async function confirmBooking(e: React.FormEvent) {
+    e.preventDefault()
+    if (!day || !slot) return
+
+    setSending(true)
+    setError(null)
+
+    const result = await submitLead({
+      kind: 'booking',
+      email,
+      company,
+      callType: active.title,
+      host: active.host,
+      day,
+      slot,
+    })
+
+    setSending(false)
+
+    if (!result.ok) {
+      setError(result.message)
+      return
+    }
+
+    setNotice(result.pending ? result.message : null)
+    setConfirmed(true)
+  }
 
   return (
     <BookingContext.Provider value={value}>
@@ -58,8 +92,8 @@ export function BookingProvider({ children }: { children: React.ReactNode }) {
           </div>
 
           {confirmed ? (
-            <div className="px-5 py-12 text-center sm:px-7">
-              <div className="mx-auto flex size-10 items-center justify-center border border-foreground bg-foreground text-background">
+            <div className="px-5 py-12 text-center duration-300 animate-in fade-in sm:px-7">
+              <div className="mx-auto flex size-10 items-center justify-center border border-accent bg-accent text-accent-foreground duration-500 animate-in zoom-in-50">
                 <Check className="size-5" />
               </div>
               <h3 className="mt-5 text-xl font-semibold uppercase tracking-[-0.02em]">Slot held</h3>
@@ -67,6 +101,11 @@ export function BookingProvider({ children }: { children: React.ReactNode }) {
                 {active.title} — {day} at {slot}. A calendar invite and the pre-call audit checklist are on the way to{' '}
                 <span className="font-mono text-foreground">{email || 'your inbox'}</span>.
               </p>
+              {notice ? (
+                <p className="mx-auto mt-4 max-w-md border border-border bg-muted px-3 py-2 font-mono text-[11px] leading-relaxed text-muted-foreground">
+                  {notice}
+                </p>
+              ) : null}
               <button
                 type="button"
                 onClick={() => setIsOpen(false)}
@@ -163,36 +202,65 @@ export function BookingProvider({ children }: { children: React.ReactNode }) {
                   ))}
                 </div>
 
-                <form
-                  className="mt-6 flex flex-col gap-2 sm:flex-row"
-                  onSubmit={(e) => {
-                    e.preventDefault()
-                    if (day && slot) setConfirmed(true)
-                  }}
-                >
-                  <label className="sr-only" htmlFor="booking-email">
-                    Work email
-                  </label>
-                  <Input
-                    id="booking-email"
-                    type="email"
-                    required
-                    placeholder="you@company.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="h-11 rounded-none border-border bg-card font-mono text-sm"
-                  />
+                <form className="mt-6 flex flex-col gap-2" onSubmit={confirmBooking}>
+                  <div className="flex flex-col gap-2 sm:flex-row">
+                    <label className="sr-only" htmlFor="booking-email">
+                      Work email
+                    </label>
+                    <Input
+                      id="booking-email"
+                      type="email"
+                      required
+                      placeholder="you@company.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="h-11 rounded-none border-border bg-card font-mono text-sm transition-colors focus-visible:border-accent"
+                    />
+                    <label className="sr-only" htmlFor="booking-company">
+                      Company
+                    </label>
+                    <Input
+                      id="booking-company"
+                      placeholder="Company (optional)"
+                      value={company}
+                      onChange={(e) => setCompany(e.target.value)}
+                      className="h-11 rounded-none border-border bg-card font-mono text-sm transition-colors focus-visible:border-accent"
+                    />
+                  </div>
                   <button
                     type="submit"
-                    disabled={!day || !slot}
-                    className="inline-flex h-11 shrink-0 items-center justify-center gap-2 border border-foreground bg-foreground px-5 text-xs font-semibold uppercase tracking-[0.14em] text-background transition-colors enabled:hover:border-accent enabled:hover:bg-accent disabled:opacity-40"
+                    disabled={!day || !slot || sending}
+                    className="group inline-flex h-11 shrink-0 items-center justify-center gap-2 border border-foreground bg-foreground px-5 text-xs font-semibold uppercase tracking-[0.14em] text-background transition-all enabled:hover:border-accent enabled:hover:bg-accent disabled:opacity-40"
                   >
-                    Confirm slot <ArrowRight className="size-3.5" />
+                    {sending ? (
+                      <>
+                        <Loader2 className="size-3.5 animate-spin" /> Holding slot
+                      </>
+                    ) : (
+                      <>
+                        Confirm slot
+                        <ArrowRight className="size-3.5 transition-transform group-enabled:group-hover:translate-x-0.5" />
+                      </>
+                    )}
                   </button>
                 </form>
-                <p className="mt-3 label-mono text-muted-foreground">
-                  {day && slot ? `Selected — ${day} / ${slot}` : 'Pick a day and time to continue'}
-                </p>
+                {error ? (
+                  <p
+                    role="alert"
+                    className="mt-3 flex items-start gap-2 border border-destructive/40 bg-destructive/5 px-3 py-2.5 text-xs leading-relaxed text-destructive duration-200 animate-in fade-in slide-in-from-top-1"
+                  >
+                    <AlertCircle className="mt-px size-3.5 shrink-0" />
+                    {error}
+                  </p>
+                ) : (
+                  <p className="mt-3 label-mono text-muted-foreground">
+                    {day && slot ? (
+                      <span className="text-accent">{`Selected — ${day} / ${slot}`}</span>
+                    ) : (
+                      'Pick a day and time to continue'
+                    )}
+                  </p>
+                )}
               </div>
             </div>
           )}
