@@ -284,23 +284,6 @@
   box-shadow: 0 12px 32px -18px color-mix(in oklab, var(--foreground) 45%, transparent);
 }
 
-/* ---------- smooth number transitions ---------- */
-
-@keyframes number-fade {
-  0% {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animate-number {
-  animation: number-fade 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

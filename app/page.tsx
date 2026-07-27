@@ -1,10 +1,6 @@
-'use client'
-
 import Link from 'next/link'
 import { ArrowUpRight, Check, ShieldCheck } from 'lucide-react'
-import { motion } from 'framer-motion'
 import { AuditRequest } from '@/components/site/audit-request'
-import { AnimatedCurrency, AnimatedCounter } from '@/components/site/animated-counter'
 import { BookingSection } from '@/components/site/booking-section'
 import { CtaButton } from '@/components/site/cta-button'
 import { FaqSection } from '@/components/site/faq-section'
@@ -69,9 +65,7 @@ export default function HomePage() {
                 <p className="label-mono text-muted-foreground">Live account snapshot</p>
                 <LogoMark className="h-3 text-accent" />
               </div>
-              <p className="figure-mono mt-5 text-[clamp(2rem,4vw,2.75rem)] leading-none tracking-[-0.04em]">
-                $<AnimatedCounter value={84600000} format={(v) => (v / 1000000).toFixed(1)} duration={2.2} className="inline" suffix="M" />
-              </p>
+              <p className="figure-mono mt-5 text-[clamp(2rem,4vw,2.75rem)] leading-none tracking-[-0.04em]">$84.6M</p>
               <p className="mt-3 label-mono text-muted-foreground">Tracked client revenue since 2019</p>
             </div>
 
@@ -80,31 +74,19 @@ export default function HomePage() {
                 <p className="label-mono text-muted-foreground">Attributed revenue by channel</p>
                 <p className="label-mono text-accent">Trailing 90d</p>
               </div>
-              <motion.div
+              <div
                 aria-hidden="true"
                 className="flex h-24 items-end gap-1.5 sm:h-28"
                 role="presentation"
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                transition={{ duration: 0.3 }}
-                viewport={{ once: true }}
               >
                 {[34, 41, 38, 52, 47, 63, 58, 71, 66, 82, 78, 96].map((height, i) => (
-                  <motion.div
+                  <div
                     key={i}
-                    initial={{ scaleY: 0 }}
-                    whileInView={{ scaleY: 1 }}
-                    transition={{
-                      duration: 0.9,
-                      delay: i * 0.05,
-                      ease: [0.16, 1, 0.3, 1],
-                    }}
-                    viewport={{ once: true }}
-                    style={{ originY: 'bottom', height: `${height}%` }}
-                    className={`flex-1 ${i > 8 ? 'bg-accent' : 'bg-foreground/15'}`}
+                    style={{ height: `${height}%`, '--rise-delay': `${300 + i * 45}ms` } as React.CSSProperties}
+                    className={`grow-bar flex-1 ${i > 8 ? 'bg-accent' : 'bg-foreground/15'}`}
                   />
                 ))}
-              </motion.div>
+              </div>
               <dl className="flex flex-col gap-2 border-t border-border pt-4">
                 {[
                   ['Paid social', '38%'],
@@ -122,34 +104,15 @@ export default function HomePage() {
 
             {/* Hairlines are placed by position, so cells can be added or removed freely. */}
             <dl className="grid grid-cols-2">
-              {SNAPSHOT_STATS.map((stat, idx) => {
-                const isNumeric = /^\d+/.test(stat.value)
-                const numValue = isNumeric ? parseInt(stat.value) : null
-
-                return (
-                  <motion.div
-                    key={stat.label}
-                    initial={{ opacity: 0, y: 8 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{
-                      duration: 0.5,
-                      delay: idx * 0.08,
-                      ease: [0.16, 1, 0.3, 1],
-                    }}
-                    viewport={{ once: true, amount: 0.5 }}
-                    className="border-border p-6 [&:not(:nth-last-child(-n+2))]:border-b [&:nth-child(odd)]:border-r"
-                  >
-                    <dd className="figure-mono text-2xl leading-none tracking-[-0.03em]">
-                      {isNumeric && numValue ? (
-                        <AnimatedCounter value={numValue} duration={1.6} className="inline" />
-                      ) : (
-                        stat.value
-                      )}
-                    </dd>
-                    <dt className="mt-3 label-mono text-muted-foreground">{stat.label}</dt>
-                  </motion.div>
-                )
-              })}
+              {SNAPSHOT_STATS.map((stat) => (
+                <div
+                  key={stat.label}
+                  className="border-border p-6 [&:not(:nth-last-child(-n+2))]:border-b [&:nth-child(odd)]:border-r"
+                >
+                  <dd className="figure-mono text-2xl leading-none tracking-[-0.03em]">{stat.value}</dd>
+                  <dt className="mt-3 label-mono text-muted-foreground">{stat.label}</dt>
+                </div>
+              ))}
             </dl>
             <Link
               href="/work"

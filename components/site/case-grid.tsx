@@ -5,7 +5,6 @@ import Link from 'next/link'
 import { ArrowUpRight, ArrowRight } from 'lucide-react'
 import { Reveal } from '@/components/site/reveal'
 import { CASE_FILTERS, CASE_STUDIES } from '@/lib/content'
-import { AnimatedFigure } from '@/components/site/animated-counter'
 
 export function CaseGrid() {
   const [active, setActive] = useState<string>('All')
@@ -41,7 +40,7 @@ export function CaseGrid() {
       <div className="mt-8 grid gap-4 lg:grid-cols-2">
         {studies.map((study, index) => (
           <Reveal key={`${active}-${study.slug}`} delay={index * 70} className="flex">
-            <Link
+          <Link
             href={`/work/${study.slug}`}
             className="lift group flex flex-1 flex-col border border-border hover:border-foreground"
           >
@@ -64,15 +63,9 @@ export function CaseGrid() {
                   <div key={item.label}>
                     <dt className="label-mono text-muted-foreground">{item.label}</dt>
                     <dd className="figure-mono mt-2 flex flex-wrap items-baseline gap-1.5 text-sm">
-                      <span className="text-muted-foreground line-through decoration-muted-foreground/40">
-                        {item.value}
-                      </span>
+                      <span className="text-muted-foreground line-through decoration-muted-foreground/40">{item.value}</span>
                       <ArrowRight className="size-3 shrink-0 text-accent" aria-hidden="true" />
-                      <AnimatedFigure
-                        value={study.after[i].value}
-                        duration={1.4}
-                        className="font-medium"
-                      />
+                      <span className="font-medium">{study.after[i].value}</span>
                     </dd>
                   </div>
                 ))}
@@ -83,7 +76,7 @@ export function CaseGrid() {
               Read the breakdown
               <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </span>
-            </Link>
+          </Link>
           </Reveal>
         ))}
       </div>

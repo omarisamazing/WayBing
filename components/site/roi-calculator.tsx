@@ -2,10 +2,8 @@
 
 import { useMemo, useState } from 'react'
 import { ArrowUpRight } from 'lucide-react'
-import { motion } from 'framer-motion'
 import { useBooking } from '@/components/site/booking-provider'
 import { Shell, SectionHead } from '@/components/site/primitives'
-import { AnimatedCurrency } from '@/components/site/animated-counter'
 
 const BENCHMARK = 3.5
 
@@ -113,20 +111,15 @@ export function RoiCalculator() {
           </div>
 
           <div className="flex flex-col justify-between gap-8 bg-foreground p-6 text-background sm:p-10">
-            <Reveal>
+            <div>
               <p className="label-mono text-background/50">Monthly revenue gap</p>
               <p className="figure-mono mt-4 text-[clamp(2.5rem,7vw,4.5rem)] font-medium leading-[0.9] tracking-[-0.04em] text-accent">
-                <AnimatedCurrency value={gap} duration={2} className="inline" />
+                {currency(gap)}
               </p>
               <p className="mt-5 max-w-md text-sm leading-relaxed text-background/70">
-                {gap > 0 ? (
-                  <>
-                    That is <AnimatedCurrency value={annual} duration={1.6} className="figure-mono" /> a year in
-                    unrealised revenue at your current spend level — before any budget increase.
-                  </>
-                ) : (
-                  'You are already at or above benchmark. The next lever is margin-gated scaling and organic demand capture, not more testing.'
-                )}
+                {gap > 0
+                  ? `That is ${currency(annual)} a year in unrealised revenue at your current spend level — before any budget increase.`
+                  : 'You are already at or above benchmark. The next lever is margin-gated scaling and organic demand capture, not more testing.'}
               </p>
 
               <div className="mt-8">
@@ -141,7 +134,7 @@ export function RoiCalculator() {
                   />
                 </div>
               </div>
-            </motion.div>
+            </div>
 
             <button
               type="button"
