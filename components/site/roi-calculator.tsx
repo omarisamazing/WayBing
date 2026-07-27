@@ -113,21 +113,21 @@ export function RoiCalculator() {
           </div>
 
           <div className="flex flex-col justify-between gap-8 bg-foreground p-6 text-background sm:p-10">
-            <motion.div initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} viewport={{ once: true, amount: 0.3 }}>
+            <Reveal>
               <p className="label-mono text-background/50">Monthly revenue gap</p>
               <p className="figure-mono mt-4 text-[clamp(2.5rem,7vw,4.5rem)] font-medium leading-[0.9] tracking-[-0.04em] text-accent">
                 <AnimatedCurrency value={gap} duration={2} className="inline" />
               </p>
               <p className="mt-5 max-w-md text-sm leading-relaxed text-background/70">
-                {gap > 0
-                  ? `That is $`
-                  : 'You are already at or above benchmark. The next lever is margin-gated scaling and organic demand capture, not more testing.'}
+                {gap > 0 ? (
+                  <>
+                    That is <AnimatedCurrency value={annual} duration={1.6} className="figure-mono" /> a year in
+                    unrealised revenue at your current spend level — before any budget increase.
+                  </>
+                ) : (
+                  'You are already at or above benchmark. The next lever is margin-gated scaling and organic demand capture, not more testing.'
+                )}
               </p>
-              {gap > 0 && (
-                <p className="mt-2 max-w-md text-sm leading-relaxed text-background/70">
-                  <AnimatedCurrency value={annual} duration={2} className="inline" /> a year in unrealised revenue at your current spend level — before any budget increase.
-                </p>
-              )}
 
               <div className="mt-8">
                 <div className="flex items-center justify-between label-mono text-background/50">
