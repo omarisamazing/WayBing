@@ -64,7 +64,7 @@ export function FaqSection() {
                       isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
                     )}
                   >
-                    <p className="overflow-hidden pb-6 text-sm leading-relaxed text-muted-foreground lg:max-w-[44rem]">
+                    <p className="copy-sm overflow-hidden pb-6 text-muted-foreground lg:max-w-[44rem]">
                       {faq.a}
                     </p>
                   </div>

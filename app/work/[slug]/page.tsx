@@ -5,7 +5,9 @@ import { ArrowLeft, ArrowUpRight } from 'lucide-react'
 import { BookingSection } from '@/components/site/booking-section'
 import { PageHero } from '@/components/site/page-hero'
 import { Shell, SectionHead } from '@/components/site/primitives'
+import { JsonLd } from '@/components/site/json-ld'
 import { CASE_STUDIES } from '@/lib/content'
+import { breadcrumbSchema, caseStudySchema, graph, pageMeta } from '@/lib/seo'
 
 export function generateStaticParams() {
   return CASE_STUDIES.map((study) => ({ slug: study.slug }))
@@ -15,7 +17,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params
   const study = CASE_STUDIES.find((item) => item.slug === slug)
   if (!study) return {}
-  return { title: `${study.client} — WayBing case study`, description: study.headline }
+  return pageMeta({
+    title: `${study.client} case study — ${study.category}`,
+    description: `${study.headline}. ${study.summary}`.slice(0, 300),
+    path: `/work/${study.slug}`,
+    type: 'article',
+    keywords: [`${study.client} case study`, study.category, study.industry, 'digital marketing case study'],
+  })
 }
 
 export default async function CaseStudyPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -133,6 +141,16 @@ export default async function CaseStudyPage({ params }: { params: Promise<{ slug
       </section>
 
       <BookingSection />
+      <JsonLd
+        data={graph(
+          caseStudySchema(study),
+          breadcrumbSchema([
+            { name: 'Home', path: '/' },
+            { name: 'Work', path: '/work' },
+            { name: study.client, path: `/work/${study.slug}` },
+          ])
+        )}
+      />
     </>
   )
 }

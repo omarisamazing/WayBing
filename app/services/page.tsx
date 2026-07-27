@@ -6,12 +6,24 @@ import { FaqSection } from '@/components/site/faq-section'
 import { PageHero } from '@/components/site/page-hero'
 import { Shell, SectionHead } from '@/components/site/primitives'
 import { ENGINE_STEPS, SERVICES } from '@/lib/content'
+import { breadcrumbSchema, graph, pageMeta } from '@/lib/seo'
+import { SITE } from '@/lib/site'
+import { JsonLd } from '@/components/site/json-ld'
 
-export const metadata: Metadata = {
-  title: 'Services — Creative, CRO, Paid Ads & SEO',
+export const metadata: Metadata = pageMeta({
+  title: 'Digital Marketing Services — Creative, CRO, Paid Ads & SEO',
   description:
-    'Four services that compound: social and creative design, web design and CRO, paid ads with server-side tracking, and SEO growth.',
-}
+    'WayBing digital marketing services: social and creative design, web design and CRO, paid ads with server-side tracking, and SEO growth. Four lines that compound.',
+  path: '/services',
+  keywords: [
+    'digital marketing services',
+    'WayBing services',
+    'CRO services',
+    'paid ads management',
+    'SEO services',
+    'creative design services',
+  ],
+})
 
 export default function ServicesPage() {
   return (
@@ -101,6 +113,24 @@ export default function ServicesPage() {
 
       <FaqSection />
       <BookingSection />
+      <JsonLd
+        data={graph(
+          breadcrumbSchema([
+            { name: 'Home', path: '/' },
+            { name: 'Services', path: '/services' },
+          ]),
+          {
+            '@type': 'ItemList',
+            name: 'WayBing digital marketing services',
+            itemListElement: SERVICES.map((service, i) => ({
+              '@type': 'ListItem',
+              position: i + 1,
+              name: service.title,
+              url: `${SITE.url}/services/${service.slug}`,
+            })),
+          }
+        )}
+      />
     </>
   )
 }

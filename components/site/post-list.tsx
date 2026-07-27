@@ -85,7 +85,7 @@ export function PostList() {
                 <span className="text-muted-foreground">{post.readTime}</span>
               </div>
               <h3 className="mt-6 text-xl font-semibold uppercase tracking-[-0.01em] text-balance">{post.title}</h3>
-              <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{post.excerpt}</p>
+              <p className="copy-sm mt-4 text-muted-foreground">{post.excerpt}</p>
             </div>
             <div className="mt-8 flex items-center justify-between gap-4 border-t border-border pt-5 label-mono text-muted-foreground">
               {formatDate(post.date)}

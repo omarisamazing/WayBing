@@ -4,7 +4,9 @@ import { notFound } from 'next/navigation'
 import { ArrowLeft, ArrowUpRight, Check } from 'lucide-react'
 import { CtaButton } from '@/components/site/cta-button'
 import { Shell } from '@/components/site/primitives'
+import { JsonLd } from '@/components/site/json-ld'
 import { POSTS } from '@/lib/content'
+import { articleSchema, breadcrumbSchema, graph, pageMeta } from '@/lib/seo'
 
 export function generateStaticParams() {
   return POSTS.map((post) => ({ slug: post.slug }))
@@ -14,7 +16,14 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params
   const post = POSTS.find((item) => item.slug === slug)
   if (!post) return {}
-  return { title: `${post.title} — WayBing`, description: post.excerpt }
+  return pageMeta({
+    title: post.title,
+    description: post.excerpt,
+    path: `/blog/${post.slug}`,
+    type: 'article',
+    publishedTime: post.date,
+    keywords: [post.category, 'digital marketing', `WayBing ${post.category}`],
+  })
 }
 
 function formatDate(value: string) {
@@ -147,6 +156,16 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           </div>
         </Shell>
       </section>
+      <JsonLd
+        data={graph(
+          articleSchema(post),
+          breadcrumbSchema([
+            { name: 'Home', path: '/' },
+            { name: 'Resources', path: '/blog' },
+            { name: post.title, path: `/blog/${post.slug}` },
+          ])
+        )}
+      />
     </>
   )
 }

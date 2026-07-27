@@ -3,10 +3,12 @@ import type { Metadata, Viewport } from 'next'
 import { Instrument_Sans, JetBrains_Mono } from 'next/font/google'
 import { BookingProvider } from '@/components/site/booking-provider'
 import { Cursor } from '@/components/site/cursor'
+import { JsonLd } from '@/components/site/json-ld'
 import { ScrollProgress } from '@/components/site/scroll-progress'
 import { SiteNav } from '@/components/site/site-nav'
 import { SiteFooter } from '@/components/site/site-footer'
 import { Ticker } from '@/components/site/ticker'
+import { graph, organizationSchema, websiteSchema } from '@/lib/seo'
 import { SITE } from '@/lib/site'
 import './globals.css'
 
@@ -26,24 +28,21 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   alternates: { canonical: '/' },
   title: {
+    // Brand first: a "waybing" search has to match the very start of the title.
     default: `${SITE.name} — ${SITE.tagline}`,
-    template: `%s / ${SITE.name}`,
+    template: `%s | ${SITE.name}`,
   },
-  description:
-    'WayBing builds revenue engines for founders and e-commerce brands: conversion-first design, CRO, paid ads with server-side tracking, and SEO growth. 60-day zero-fluff growth guarantee.',
+  description: SITE.description,
+  applicationName: SITE.name,
   generator: 'v0.app',
-  keywords: [
-    'performance marketing agency',
-    'conversion rate optimization',
-    'server-side tracking',
-    'paid ads management',
-    'SEO growth agency',
-    'growth design',
-  ],
+  keywords: [...SITE.keywords],
+  authors: [{ name: SITE.legalName, url: SITE.url }],
+  creator: SITE.legalName,
+  publisher: SITE.legalName,
+  category: 'Digital marketing',
   openGraph: {
     title: `${SITE.name} — ${SITE.tagline}`,
-    description:
-      'A revenue engine, not a retainer. Creative, CRO, paid media and SEO measured against blended CAC and contribution margin.',
+    description: SITE.shortDescription,
     type: 'website',
     siteName: SITE.name,
     url: SITE.url,
@@ -51,10 +50,29 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
+    site: SITE.twitterHandle,
+    creator: SITE.twitterHandle,
     title: `${SITE.name} — ${SITE.tagline}`,
-    description: 'A revenue engine, not a retainer. Measured against blended CAC and contribution margin.',
+    description: SITE.shortDescription,
   },
-  robots: { index: true, follow: true },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1,
+    },
+  },
+  // Set these in project env once the properties are claimed; omitted otherwise.
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+    other: process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION
+      ? { 'msvalidate.01': process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION }
+      : undefined,
+  },
   icons: {
     icon: [
       { url: '/icon-light-32x32.png', media: '(prefers-color-scheme: light)' },
@@ -63,22 +81,6 @@ export const metadata: Metadata = {
     ],
     apple: '/apple-icon.png',
   },
-}
-
-/** Search-engine entity data. Cheap, static, and helps the brand panel resolve. */
-const organizationSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'ProfessionalService',
-  name: SITE.legalName,
-  alternateName: SITE.name,
-  url: SITE.url,
-  email: SITE.email,
-  telephone: SITE.phone,
-  foundingDate: SITE.founded,
-  description:
-    'Performance marketing and growth design: conversion-first design, CRO, paid media and SEO wired to server-side tracking.',
-  areaServed: SITE.locations,
-  sameAs: SITE.socials.map((social) => social.href),
 }
 
 export const viewport: Viewport = {
@@ -108,11 +110,8 @@ export default function RootLayout({
           <main id="main">{children}</main>
           <SiteFooter />
         </BookingProvider>
-        <script
-          type="application/ld+json"
-          // Static, hand-written JSON-LD — no user input is interpolated.
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
-        />
+        {/* Brand entity + website node, present on every URL so Google can merge them. */}
+        <JsonLd data={graph(organizationSchema, websiteSchema)} />
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>

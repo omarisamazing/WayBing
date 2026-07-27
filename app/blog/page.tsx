@@ -3,12 +3,18 @@ import { BookingSection } from '@/components/site/booking-section'
 import { PageHero } from '@/components/site/page-hero'
 import { PostList } from '@/components/site/post-list'
 import { Shell } from '@/components/site/primitives'
+import { JsonLd } from '@/components/site/json-ld'
+import { POSTS } from '@/lib/content'
+import { breadcrumbSchema, graph, pageMeta } from '@/lib/seo'
+import { SITE } from '@/lib/site'
 
-export const metadata: Metadata = {
-  title: 'Resources — Playbooks on CRO, tracking, paid and SEO',
+export const metadata: Metadata = pageMeta({
+  title: 'Digital Marketing Resources — CRO, Tracking, Paid & SEO Playbooks',
   description:
-    'The frameworks we run on client accounts, written out in full: server-side tracking, landing page teardowns, creative testing and commercial SEO.',
-}
+    'The digital marketing frameworks WayBing runs on client accounts, written out in full: server-side tracking, landing page teardowns, creative testing and commercial SEO.',
+  path: '/blog',
+  keywords: ['digital marketing playbooks', 'WayBing resources', 'CRO guide', 'server-side tracking guide', 'SEO playbook'],
+})
 
 export default function BlogPage() {
   return (
@@ -30,6 +36,25 @@ export default function BlogPage() {
       </section>
 
       <BookingSection />
+      <JsonLd
+        data={graph(
+          breadcrumbSchema([
+            { name: 'Home', path: '/' },
+            { name: 'Resources', path: '/blog' },
+          ]),
+          {
+            '@type': 'Blog',
+            name: `${SITE.name} digital marketing resources`,
+            url: `${SITE.url}/blog`,
+            blogPost: POSTS.map((post) => ({
+              '@type': 'BlogPosting',
+              headline: post.title,
+              url: `${SITE.url}/blog/${post.slug}`,
+              datePublished: post.date,
+            })),
+          }
+        )}
+      />
     </>
   )
 }

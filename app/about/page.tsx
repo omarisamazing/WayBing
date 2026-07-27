@@ -4,13 +4,17 @@ import { ArrowUpRight, Check, X } from 'lucide-react'
 import { BookingSection } from '@/components/site/booking-section'
 import { PageHero } from '@/components/site/page-hero'
 import { Shell, SectionHead } from '@/components/site/primitives'
+import { JsonLd } from '@/components/site/json-ld'
 import { COMPARISON_ROWS, PRINCIPLES } from '@/lib/content'
+import { breadcrumbSchema, graph, pageMeta } from '@/lib/seo'
 
-export const metadata: Metadata = {
-  title: 'About WayBing — How we run growth',
+export const metadata: Metadata = pageMeta({
+  title: 'About WayBing — The Digital Marketing Team Behind the Engine',
   description:
-    'A deliberately small performance marketing team. ROI over vanity metrics, human-crafted creative, and total dashboard transparency.',
-}
+    'WayBing is a deliberately small digital marketing team: ROI over vanity metrics, human-crafted creative, and total dashboard transparency. Founded 2019, London and New York.',
+  path: '/about',
+  keywords: ['about WayBing', 'WayBing agency', 'WayBing team', 'digital marketing agency London', 'digital marketing agency New York'],
+})
 
 const TEAM = [
   { role: 'Growth strategist', name: 'Mara Vasquez', detail: 'Ex-media buyer, $40M+ managed spend across DTC and health.' },
@@ -169,6 +173,14 @@ export default function AboutPage() {
       </section>
 
       <BookingSection />
+      <JsonLd
+        data={graph(
+          breadcrumbSchema([
+            { name: 'Home', path: '/' },
+            { name: 'About', path: '/about' },
+          ])
+        )}
+      />
     </>
   )
 }

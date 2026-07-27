@@ -31,9 +31,9 @@ export function SectionHead({
           {index ? <span className="text-accent">{index} / </span> : null}
           {label}
         </p>
-        <h2 className="display-tight mt-4 text-[clamp(2rem,5vw,3.75rem)] text-balance">{title}</h2>
+        <h2 className="display-tight mt-4 text-[clamp(1.75rem,5.5vw,3.75rem)] text-balance">{title}</h2>
       </div>
-      {intro ? <p className="max-w-sm text-sm leading-relaxed text-muted-foreground md:text-right">{intro}</p> : null}
+      {intro ? <p className="copy-sm max-w-sm text-muted-foreground md:text-right">{intro}</p> : null}
     </Reveal>
   )
 }

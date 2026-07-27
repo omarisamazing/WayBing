@@ -19,9 +19,13 @@ export function PageHero({
           <span className="text-accent">✳ </span>
           {label}
         </p>
-        <h1 className="rise rise-1 display-tight mt-6 max-w-5xl text-[clamp(2.5rem,7vw,5.5rem)] text-balance">{title}</h1>
+        <h1 className="rise rise-1 display-tight mt-5 max-w-5xl text-[clamp(2.125rem,7vw,5.5rem)] text-balance sm:mt-6">
+          {title}
+        </h1>
         {intro ? (
-          <p className="rise rise-2 mt-7 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">{intro}</p>
+          <p className="rise rise-2 mt-6 max-w-2xl text-[1.0625rem] leading-relaxed text-muted-foreground sm:mt-7 sm:text-lg">
+            {intro}
+          </p>
         ) : null}
         {meta?.length ? (
           <dl className="rise rise-3 mt-12 grid border-t border-l border-border sm:grid-cols-2 lg:grid-cols-4">

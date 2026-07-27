@@ -56,7 +56,7 @@ export function CaseGrid() {
               <h3 className="mt-4 text-xl font-semibold uppercase tracking-[-0.01em] text-balance sm:text-2xl">
                 {study.headline}
               </h3>
-              <p className="mt-4 flex-1 text-sm leading-relaxed text-muted-foreground">{study.summary}</p>
+              <p className="copy-sm mt-4 flex-1 text-muted-foreground">{study.summary}</p>
 
               <dl className="mt-7 grid grid-cols-3 gap-3 border-t border-border pt-5">
                 {study.before.map((item, i) => (

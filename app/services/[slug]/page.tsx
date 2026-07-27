@@ -6,7 +6,9 @@ import { BookingSection } from '@/components/site/booking-section'
 import { CtaButton } from '@/components/site/cta-button'
 import { PageHero } from '@/components/site/page-hero'
 import { Shell, SectionHead } from '@/components/site/primitives'
+import { JsonLd } from '@/components/site/json-ld'
 import { CASE_STUDIES, SERVICES } from '@/lib/content'
+import { breadcrumbSchema, graph, pageMeta, serviceSchema } from '@/lib/seo'
 
 export function generateStaticParams() {
   return SERVICES.map((service) => ({ slug: service.slug }))
@@ -16,7 +18,12 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params
   const service = SERVICES.find((item) => item.slug === slug)
   if (!service) return {}
-  return { title: `${service.title} — WayBing`, description: service.short }
+  return pageMeta({
+    title: service.title,
+    description: `${service.short} ${service.pitch}`.slice(0, 300),
+    path: `/services/${service.slug}`,
+    keywords: [service.title, `${service.title} agency`, `WayBing ${service.title}`, 'digital marketing agency'],
+  })
 }
 
 export default async function ServiceDetailPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -138,6 +145,16 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
       </section>
 
       <BookingSection />
+      <JsonLd
+        data={graph(
+          serviceSchema(service),
+          breadcrumbSchema([
+            { name: 'Home', path: '/' },
+            { name: 'Services', path: '/services' },
+            { name: service.title, path: `/services/${service.slug}` },
+          ])
+        )}
+      />
     </>
   )
 }

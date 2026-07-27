@@ -9,18 +9,28 @@ import { Bars, Counter, Meter } from '@/components/site/motion'
 import { Reveal } from '@/components/site/reveal'
 import { RoiCalculator } from '@/components/site/roi-calculator'
 import { Shell, SectionHead, Stat } from '@/components/site/primitives'
+import { JsonLd } from '@/components/site/json-ld'
 import { CLIENT_LOGOS, ENGINE_STEPS, FAQS, HEADLINE_STATS, SERVICES } from '@/lib/content'
+import { faqSchema, graph, ORG_ID, SITE_ID } from '@/lib/seo'
+import { SITE } from '@/lib/site'
 
-/** Rich-result data for the FAQ block below. Static, so it costs nothing at runtime. */
-const faqSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: FAQS.map((faq) => ({
-    '@type': 'Question',
-    name: faq.q,
-    acceptedAnswer: { '@type': 'Answer', text: faq.a },
-  })),
-}
+/**
+ * The homepage is the page that has to answer a plain "waybing" search, so the
+ * graph below names the brand explicitly and ties the FAQ block to it.
+ */
+const homeSchema = graph(
+  {
+    '@type': 'WebPage',
+    '@id': `${SITE.url}/#webpage`,
+    url: SITE.url,
+    name: `${SITE.name} — ${SITE.tagline}`,
+    description: SITE.description,
+    isPartOf: { '@id': SITE_ID },
+    about: { '@id': ORG_ID },
+    inLanguage: 'en',
+  },
+  faqSchema(FAQS)
+)
 
 /** The 2x2 block inside the hero snapshot card. */
 const SNAPSHOT_STATS = [
@@ -45,18 +55,19 @@ export default function HomePage() {
         <Shell className="grid gap-12 py-14 sm:py-20 lg:grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)] lg:gap-16 lg:py-24">
           <div>
             <p className="rise label-mono text-muted-foreground">
-              <span className="text-accent">✳</span> Performance marketing & growth design
+              <span className="text-accent">✳</span> WayBing — digital marketing &amp; growth design
             </p>
-            <h1 className="rise rise-1 display-tight mt-6 text-[clamp(2.75rem,8.5vw,7rem)] text-balance">
+            <h1 className="rise rise-1 display-tight mt-5 text-[clamp(2.375rem,8vw,7rem)] text-balance sm:mt-6">
               We don&rsquo;t sell{' '}
               <br className="hidden sm:block" />
               retainers. We build{' '}
               <br className="hidden sm:block" />
               <span className="text-accent">revenue engines.</span>
             </h1>
-            <p className="rise rise-2 mt-8 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-              Conversion-first design, CRO, paid media and SEO — wired to server-side tracking so every decision is made on
-              numbers that match your bank account, not a platform screenshot.
+            <p className="rise rise-2 mt-6 max-w-xl text-[1.0625rem] leading-relaxed text-muted-foreground sm:mt-8 sm:text-lg">
+              WayBing is a digital marketing agency for founders and e-commerce brands: conversion-first web design, CRO, paid
+              ads and SEO — wired to server-side tracking so every decision is made on numbers that match your bank account,
+              not a platform screenshot.
             </p>
 
             <AuditRequest className="rise rise-3 mt-9 max-w-2xl" />
@@ -176,7 +187,7 @@ export default function HomePage() {
                   <span className="label-mono text-muted-foreground">Step</span>
                 </div>
                 <h3 className="mt-8 text-2xl font-semibold uppercase tracking-[-0.02em]">{step.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{step.body}</p>
+                <p className="copy-sm mt-3 text-muted-foreground">{step.body}</p>
                 <ul className="mt-6 flex flex-col gap-2 border-t border-border pt-5">
                   {step.points.map((point) => (
                     <li key={point} className="flex items-center gap-2 label-mono text-muted-foreground">
@@ -196,7 +207,7 @@ export default function HomePage() {
                 href={`/services/${service.slug}`}
                 className="press group flex items-center justify-between gap-3 border border-border px-5 py-4 transition-colors hover:border-foreground hover:bg-foreground hover:text-background"
               >
-                <span className="text-sm font-medium">{service.title}</span>
+                <span className="text-[0.9375rem] font-medium sm:text-sm">{service.title}</span>
                 <ArrowUpRight className="size-4 shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </Link>
             ))}
@@ -217,7 +228,7 @@ export default function HomePage() {
               <br />
               guarantee
             </h2>
-            <p className="mt-7 max-w-xl text-base leading-relaxed text-background/70 sm:text-lg">
+            <p className="mt-7 max-w-xl text-[1.0625rem] leading-relaxed text-background/70 sm:text-lg">
               At kickoff we agree on trackable targets — conversion rate, blended CAC or contribution margin. If those numbers
               are not hit inside 60 days, we keep working at zero cost until they are. It sits in the agreement, not just on
               this page.
@@ -257,7 +268,7 @@ export default function HomePage() {
                   as="li"
                   delay={i * 70}
                   variant="left"
-                  className="flex items-start gap-3 border-b border-background/25 p-5 text-sm last:border-b-0"
+                  className="copy-sm flex items-start gap-3 border-b border-background/25 p-5 last:border-b-0"
                 >
                   <Check className="mt-0.5 size-4 shrink-0 text-accent" />
                   {item}
@@ -270,7 +281,66 @@ export default function HomePage() {
 
       <FaqSection />
       <BookingSection />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+
+      {/* Plain-language brand section: what WayBing is, in the words people search. */}
+      <section aria-labelledby="brand-title" className="border-b border-border bg-muted py-16 sm:py-24">
+        <Shell className="grid gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] lg:gap-16">
+          <div>
+            <p className="label-mono text-muted-foreground">
+              <span className="text-accent">07 / </span>Who we are
+            </p>
+            <h2 id="brand-title" className="display-tight mt-5 text-[clamp(1.875rem,5vw,3.5rem)] text-balance">
+              WayBing is a digital marketing agency built around revenue
+            </h2>
+            <div className="mt-6 flex flex-col gap-4 copy-relaxed text-muted-foreground">
+              <p className="copy-sm">
+                WayBing (also written Way Bing) is a performance-focused digital marketing agency founded in{' '}
+                {SITE.founded}, working remote-first from {SITE.locations.join(' and ')}. We run digital marketing for
+                founders, DTC brands and high-ticket service businesses that need acquisition to pay for itself rather than
+                fill a slide.
+              </p>
+              <p className="copy-sm">
+                Four disciplines sit under one roof — social and creative design, web design and conversion rate
+                optimisation, paid ads across Meta, Google and TikTok with server-side tracking, and SEO growth. Every
+                engagement is reported on blended CAC and contribution margin, and every account, container and design file
+                stays in your ownership.
+              </p>
+            </div>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link
+                href="/services"
+                className="press inline-flex h-12 items-center border border-foreground px-6 font-mono text-[11px] uppercase tracking-[0.14em] transition-colors hover:bg-foreground hover:text-background"
+              >
+                All services
+              </Link>
+              <Link
+                href="/about"
+                className="press inline-flex h-12 items-center border border-border px-6 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground transition-colors hover:border-foreground hover:text-foreground"
+              >
+                How we work
+              </Link>
+            </div>
+          </div>
+
+          <dl className="grid grid-cols-1 border-t border-l border-border sm:grid-cols-2">
+            {[
+              { term: 'Agency', detail: `${SITE.legalName}, founded ${SITE.founded}` },
+              { term: 'Focus', detail: 'Digital marketing, CRO, paid media, SEO' },
+              { term: 'Clients', detail: 'DTC, e-commerce, high-ticket services' },
+              { term: 'Based', detail: `${SITE.locations.join(' / ')} — remote-first` },
+              { term: 'Model', detail: '60-day targets, no lock-in retainers' },
+              { term: 'Contact', detail: SITE.email },
+            ].map((row) => (
+              <div key={row.term} className="border-r border-b border-border bg-background p-5 sm:p-6">
+                <dt className="label-mono text-muted-foreground">{row.term}</dt>
+                <dd className="mt-3 text-[0.9375rem] leading-relaxed text-pretty">{row.detail}</dd>
+              </div>
+            ))}
+          </dl>
+        </Shell>
+      </section>
+
+      <JsonLd data={homeSchema} />
     </>
   )
 }
