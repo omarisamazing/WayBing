@@ -75,6 +75,10 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
+      // Prefer a top-level favicon so browsers pick it up even when other icons
+      // are media-gated. If `/favicon.png` is present we will prefer that, but
+      // fall back to the light 32px PNG that already exists in the repo.
+      { url: '/icon-light-32x32.png' },
       { url: '/icon-light-32x32.png', media: '(prefers-color-scheme: light)' },
       { url: '/icon-dark-32x32.png', media: '(prefers-color-scheme: dark)' },
       { url: '/icon.svg', type: 'image/svg+xml' },
@@ -98,7 +102,7 @@ export default function RootLayout({
       <body className="antialiased">
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:border focus:border-foreground focus:bg-background focus:px-4 focus:py-2 focus:font-mono focus:text-xs focus:uppercase focus:tracking-[0.14em]"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:border focus:border-foreground focus:bg-background focus:px-4 focus:py-2 focus:font-mono focus:[..."
         >
           Skip to content
         </a>
