@@ -51,6 +51,40 @@ export default function HomePage() {
               <p className="mt-5 font-mono text-[clamp(2rem,4vw,2.75rem)] leading-none tracking-[-0.04em]">$84.6M</p>
               <p className="mt-3 label-mono text-muted-foreground">Tracked client revenue since 2019</p>
             </div>
+
+            <div className="flex flex-1 flex-col justify-end gap-4 border-b border-border p-6">
+              <div className="flex items-center justify-between">
+                <p className="label-mono text-muted-foreground">Attributed revenue by channel</p>
+                <p className="label-mono text-accent">Trailing 90d</p>
+              </div>
+              <div
+                aria-hidden="true"
+                className="flex h-24 items-end gap-1.5 sm:h-28"
+                role="presentation"
+              >
+                {[34, 41, 38, 52, 47, 63, 58, 71, 66, 82, 78, 96].map((height, i) => (
+                  <div
+                    key={i}
+                    style={{ height: `${height}%` }}
+                    className={`flex-1 ${i > 8 ? 'bg-accent' : 'bg-foreground/15'}`}
+                  />
+                ))}
+              </div>
+              <dl className="flex flex-col gap-2 border-t border-border pt-4">
+                {[
+                  ['Paid social', '38%'],
+                  ['Paid search', '31%'],
+                  ['Organic / SEO', '24%'],
+                  ['Email & lifecycle', '7%'],
+                ].map(([channel, share]) => (
+                  <div key={channel} className="flex items-center justify-between label-mono">
+                    <dt className="text-muted-foreground">{channel}</dt>
+                    <dd>{share}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+
             <dl className="grid grid-cols-2">
               {HEADLINE_STATS.slice(1).map((stat, i) => (
                 <div
