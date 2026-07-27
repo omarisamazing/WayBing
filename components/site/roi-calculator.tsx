@@ -1,10 +1,9 @@
 'use client'
 
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { ArrowUpRight } from 'lucide-react'
 import { useBooking } from '@/components/site/booking-provider'
 import { Shell, SectionHead } from '@/components/site/primitives'
-import { Reveal } from '@/components/site/reveal'
 
 const BENCHMARK = 3.5
 
@@ -14,40 +13,6 @@ function currency(value: number) {
     currency: 'USD',
     maximumFractionDigits: 0,
   }).format(Math.max(0, Math.round(value)))
-}
-
-/**
- * Eases a displayed number toward its target so dragging a slider reads as a
- * smooth roll rather than a hard jump. Returns the target immediately when the
- * user prefers reduced motion.
- */
-function useSmoothNumber(target: number) {
-  const [value, setValue] = useState(target)
-  const frame = useRef(0)
-
-  useEffect(() => {
-    const reduced =
-      typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
-
-    if (reduced) {
-      setValue(target)
-      return
-    }
-
-    const step = () => {
-      setValue((prev) => {
-        const delta = target - prev
-        if (Math.abs(delta) < 1) return target
-        frame.current = requestAnimationFrame(step)
-        return prev + delta * 0.18
-      })
-    }
-
-    frame.current = requestAnimationFrame(step)
-    return () => cancelAnimationFrame(frame.current)
-  }, [target])
-
-  return value
 }
 
 export function RoiCalculator() {
@@ -64,11 +29,6 @@ export function RoiCalculator() {
 
   const pct = Math.min(100, (roas / BENCHMARK) * 100)
 
-  const smoothGap = useSmoothNumber(gap)
-  const smoothCurrent = useSmoothNumber(current)
-  const smoothBenchmarked = useSmoothNumber(benchmarked)
-  const smoothAnnual = useSmoothNumber(annual)
-
   return (
     <section id="calculator" aria-labelledby="calculator-title" className="border-b border-border py-16 sm:py-24">
       <Shell>
@@ -83,14 +43,14 @@ export function RoiCalculator() {
           Ad spend and profit multiplier calculator
         </h3>
 
-        <Reveal className="mt-10 grid border border-foreground lg:grid-cols-2">
+        <div className="mt-10 grid border border-foreground lg:grid-cols-2">
           <div className="flex flex-col gap-10 border-b border-border p-6 sm:p-10 lg:border-b-0 lg:border-r">
             <div>
               <div className="flex items-baseline justify-between gap-4">
                 <label htmlFor="spend" className="label-mono text-muted-foreground">
                   Current monthly ad spend
                 </label>
-                <output htmlFor="spend" className="tabular font-mono text-2xl tracking-[-0.03em]">
+                <output htmlFor="spend" className="font-mono text-2xl tracking-[-0.03em]">
                   {currency(spend)}
                 </output>
               </div>
@@ -116,7 +76,7 @@ export function RoiCalculator() {
                 <label htmlFor="roas" className="label-mono text-muted-foreground">
                   Current blended ROAS
                 </label>
-                <output htmlFor="roas" className="tabular font-mono text-2xl tracking-[-0.03em]">
+                <output htmlFor="roas" className="font-mono text-2xl tracking-[-0.03em]">
                   {roas.toFixed(1)}x
                 </output>
               </div>
@@ -141,11 +101,11 @@ export function RoiCalculator() {
             <dl className="grid grid-cols-2 border-t border-border pt-6">
               <div className="pr-4">
                 <dt className="label-mono text-muted-foreground">Revenue today</dt>
-                <dd className="tabular mt-2 font-mono text-lg">{currency(smoothCurrent)}</dd>
+                <dd className="mt-2 font-mono text-lg">{currency(current)}</dd>
               </div>
               <div className="border-l border-border pl-4">
                 <dt className="label-mono text-muted-foreground">At 3.5x benchmark</dt>
-                <dd className="tabular mt-2 font-mono text-lg">{currency(smoothBenchmarked)}</dd>
+                <dd className="mt-2 font-mono text-lg">{currency(benchmarked)}</dd>
               </div>
             </dl>
           </div>
@@ -153,12 +113,12 @@ export function RoiCalculator() {
           <div className="flex flex-col justify-between gap-8 bg-foreground p-6 text-background sm:p-10">
             <div>
               <p className="label-mono text-background/50">Monthly revenue gap</p>
-              <p className="tabular mt-4 font-mono text-[clamp(2.5rem,7vw,4.5rem)] font-medium leading-[0.9] tracking-[-0.04em] text-accent">
-                {currency(smoothGap)}
+              <p className="mt-4 font-mono text-[clamp(2.5rem,7vw,4.5rem)] font-medium leading-[0.9] tracking-[-0.04em] text-accent">
+                {currency(gap)}
               </p>
               <p className="mt-5 max-w-md text-sm leading-relaxed text-background/70">
                 {gap > 0
-                  ? `That is ${currency(smoothAnnual)} a year in unrealised revenue at your current spend level — before any budget increase.`
+                  ? `That is ${currency(annual)} a year in unrealised revenue at your current spend level — before any budget increase.`
                   : 'You are already at or above benchmark. The next lever is margin-gated scaling and organic demand capture, not more testing.'}
               </p>
 
@@ -167,11 +127,8 @@ export function RoiCalculator() {
                   <span>Progress to benchmark</span>
                   <span className="text-accent">{pct.toFixed(0)}%</span>
                 </div>
-                <div className="mt-2 h-2 w-full overflow-hidden bg-background/15">
-                  <div
-                    className="h-full bg-accent transition-[width] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none"
-                    style={{ width: `${pct}%` }}
-                  />
+                <div className="mt-2 h-2 w-full bg-background/15">
+                  <div className="h-full bg-accent transition-[width] duration-300" style={{ width: `${pct}%` }} />
                 </div>
               </div>
             </div>
@@ -187,7 +144,7 @@ export function RoiCalculator() {
               <ArrowUpRight className="size-4 shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </button>
           </div>
-        </Reveal>
+        </div>
       </Shell>
     </section>
   )

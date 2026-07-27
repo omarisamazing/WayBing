@@ -2,12 +2,9 @@ import Link from 'next/link'
 import { ArrowUpRight, Check, ShieldCheck } from 'lucide-react'
 import { AuditRequest } from '@/components/site/audit-request'
 import { BookingSection } from '@/components/site/booking-section'
-import { CountUp } from '@/components/site/count-up'
 import { CtaButton } from '@/components/site/cta-button'
 import { FaqSection } from '@/components/site/faq-section'
 import { LogoMark } from '@/components/site/logo'
-import { MiniBars } from '@/components/site/mini-bars'
-import { Reveal } from '@/components/site/reveal'
 import { RoiCalculator } from '@/components/site/roi-calculator'
 import { Shell, SectionHead, Stat } from '@/components/site/primitives'
 import { CLIENT_LOGOS, ENGINE_STEPS, HEADLINE_STATS, SERVICES } from '@/lib/content'
@@ -18,22 +15,24 @@ export default function HomePage() {
       <section className="border-b border-border">
         <Shell className="grid gap-12 py-14 sm:py-20 lg:grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)] lg:gap-16 lg:py-24">
           <div>
-            <p className="anim-fade label-mono text-muted-foreground">
-              <span className="anim-dot mr-1 inline-block text-accent">✳</span> Performance marketing &amp; growth design
+            <p className="label-mono text-muted-foreground">
+              <span className="text-accent">✳</span> Performance marketing & growth design
             </p>
             <h1 className="display-tight mt-6 text-[clamp(2.75rem,8.5vw,7rem)] text-balance">
-              <span className="anim-rise delay-1 block">We don&apos;t sell</span>
-              <span className="anim-rise delay-2 block">retainers. We build</span>
-              <span className="anim-rise delay-3 block text-accent">revenue engines.</span>
+              We don&apos;t sell
+              <br />
+              retainers. We build
+              <br />
+              <span className="text-accent">revenue engines.</span>
             </h1>
-            <p className="anim-rise delay-4 mt-8 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+            <p className="mt-8 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
               Conversion-first design, CRO, paid media and SEO — wired to server-side tracking so every decision is made on
               numbers that match your bank account, not a platform screenshot.
             </p>
 
-            <AuditRequest className="anim-rise delay-5 mt-9 max-w-2xl" />
+            <AuditRequest className="mt-9 max-w-2xl" />
 
-            <div className="anim-fade delay-6 mt-10 flex flex-wrap items-center gap-x-8 gap-y-3">
+            <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-3">
               {['No lock-in contracts', 'You own every asset', '60-day guarantee'].map((item) => (
                 <span key={item} className="inline-flex items-center gap-2 label-mono text-muted-foreground">
                   <Check className="size-3.5 text-accent" />
@@ -43,15 +42,13 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="anim-rise delay-3 flex flex-col justify-between border border-foreground bg-card">
+          <div className="flex flex-col justify-between border border-foreground bg-card">
             <div className="border-b border-border p-6">
               <div className="flex items-center justify-between">
                 <p className="label-mono text-muted-foreground">Live account snapshot</p>
                 <LogoMark className="h-3 text-accent" />
               </div>
-              <p className="mt-5 font-mono text-[clamp(2rem,4vw,2.75rem)] leading-none tracking-[-0.04em]">
-                <CountUp value="$84.6M" />
-              </p>
+              <p className="mt-5 font-mono text-[clamp(2rem,4vw,2.75rem)] leading-none tracking-[-0.04em]">$84.6M</p>
               <p className="mt-3 label-mono text-muted-foreground">Tracked client revenue since 2019</p>
             </div>
 
@@ -60,11 +57,19 @@ export default function HomePage() {
                 <p className="label-mono text-muted-foreground">Attributed revenue by channel</p>
                 <p className="label-mono text-accent">Trailing 90d</p>
               </div>
-              <MiniBars
-                values={[34, 41, 38, 52, 47, 63, 58, 71, 66, 82, 78, 96]}
-                accentFrom={9}
-                className="h-24 sm:h-28"
-              />
+              <div
+                aria-hidden="true"
+                className="flex h-24 items-end gap-1.5 sm:h-28"
+                role="presentation"
+              >
+                {[34, 41, 38, 52, 47, 63, 58, 71, 66, 82, 78, 96].map((height, i) => (
+                  <div
+                    key={i}
+                    style={{ height: `${height}%` }}
+                    className={`flex-1 ${i > 8 ? 'bg-accent' : 'bg-foreground/15'}`}
+                  />
+                ))}
+              </div>
               <dl className="flex flex-col gap-2 border-t border-border pt-4">
                 {[
                   ['Paid social', '38%'],
@@ -123,11 +128,11 @@ export default function HomePage() {
             ))}
           </dl>
         </Shell>
-        <div className="group flex w-max animate-marquee items-center py-5 hover:[animation-play-state:paused]">
+        <div className="flex w-max animate-marquee items-center py-5">
           {[...CLIENT_LOGOS, ...CLIENT_LOGOS].map((logo, i) => (
             <span
               key={`${logo}-${i}`}
-              className="px-8 font-sans text-lg font-semibold uppercase tracking-[0.08em] whitespace-nowrap text-muted-foreground/70 transition-colors duration-300 hover:text-foreground"
+              className="px-8 font-sans text-lg font-semibold uppercase tracking-[0.08em] whitespace-nowrap text-muted-foreground/70"
             >
               {logo}
             </span>
@@ -147,17 +152,10 @@ export default function HomePage() {
           />
 
           <div className="mt-10 grid border-t border-l border-border md:grid-cols-2 xl:grid-cols-4">
-            {ENGINE_STEPS.map((step, i) => (
-              <Reveal
-                key={step.step}
-                as="article"
-                delay={i * 90}
-                className="group flex flex-col border-r border-b border-border p-6 transition-colors duration-300 hover:bg-muted sm:p-8"
-              >
+            {ENGINE_STEPS.map((step) => (
+              <article key={step.step} className="flex flex-col border-r border-b border-border p-6 sm:p-8">
                 <div className="flex items-baseline justify-between">
-                  <span className="font-mono text-4xl leading-none tracking-[-0.04em] text-accent transition-transform duration-300 group-hover:-translate-y-0.5">
-                    {step.step}
-                  </span>
+                  <span className="font-mono text-4xl leading-none tracking-[-0.04em] text-accent">{step.step}</span>
                   <span className="label-mono text-muted-foreground">Step</span>
                 </div>
                 <h3 className="mt-8 text-2xl font-semibold uppercase tracking-[-0.02em]">{step.title}</h3>
@@ -170,17 +168,16 @@ export default function HomePage() {
                     </li>
                   ))}
                 </ul>
-              </Reveal>
+              </article>
             ))}
           </div>
 
           <div className="mt-10 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-            {SERVICES.map((service, i) => (
+            {SERVICES.map((service) => (
               <Link
                 key={service.slug}
                 href={`/services/${service.slug}`}
-                style={{ animationDelay: `${i * 70}ms` }}
-                className="group anim-rise flex items-center justify-between gap-3 border border-border px-5 py-4 transition-colors duration-300 hover:border-foreground hover:bg-foreground hover:text-background"
+                className="group flex items-center justify-between gap-3 border border-border px-5 py-4 transition-colors hover:border-foreground hover:bg-foreground hover:text-background"
               >
                 <span className="text-sm font-medium">{service.title}</span>
                 <ArrowUpRight className="size-4 shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -225,7 +222,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          <Reveal className="border border-background/25">
+          <div className="border border-background/25">
             <div className="flex items-center gap-3 border-b border-background/25 p-6">
               <ShieldCheck className="size-5 text-accent" />
               <p className="label-mono text-background/60">What is written into the agreement</p>
@@ -237,19 +234,14 @@ export default function HomePage() {
                 'Cancel any time after the 60-day cycle',
                 'All accounts, files and containers stay yours',
                 'Weekly decision log, shared dashboard access',
-              ].map((item, i) => (
-                <Reveal
-                  key={item}
-                  as="li"
-                  delay={120 + i * 80}
-                  className="flex items-start gap-3 border-b border-background/25 p-5 text-sm last:border-b-0"
-                >
+              ].map((item) => (
+                <li key={item} className="flex items-start gap-3 border-b border-background/25 p-5 text-sm last:border-b-0">
                   <Check className="mt-0.5 size-4 shrink-0 text-accent" />
                   {item}
-                </Reveal>
+                </li>
               ))}
             </ul>
-          </Reveal>
+          </div>
         </Shell>
       </section>
 

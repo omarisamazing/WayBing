@@ -85,13 +85,13 @@ export function AuditRequest({ className, variant = 'hero' }: { className?: stri
             type="button"
             aria-label="Close panel"
             onClick={() => setOpenPanel(false)}
-            className="absolute inset-0 bg-foreground/25 backdrop-blur-[2px] duration-300 animate-in fade-in"
+            className="absolute inset-0 bg-foreground/25 backdrop-blur-[2px]"
           />
           <div
             role="dialog"
             aria-modal="true"
             aria-label="Project scope"
-            className="relative flex h-full w-full max-w-lg flex-col overflow-y-auto border-l border-foreground bg-background shadow-2xl duration-400 ease-out animate-in slide-in-from-right"
+            className="relative flex h-full w-full max-w-lg flex-col overflow-y-auto border-l border-foreground bg-background shadow-2xl duration-200 animate-in slide-in-from-right"
           >
             <div className="flex items-start justify-between gap-4 border-b border-border p-5 sm:p-7">
               <div>
@@ -113,11 +113,11 @@ export function AuditRequest({ className, variant = 'hero' }: { className?: stri
 
             {status === 'done' ? (
               <div className="flex flex-1 flex-col items-center justify-center p-7 text-center">
-                <div className="anim-rise flex size-10 items-center justify-center border border-foreground bg-accent text-accent-foreground">
+                <div className="flex size-10 items-center justify-center border border-foreground bg-foreground text-background">
                   <Check className="size-5" />
                 </div>
-                <h3 className="anim-rise delay-1 mt-5 text-xl font-semibold uppercase tracking-[-0.02em]">Audit queued</h3>
-                <p className="anim-rise delay-2 mt-2 max-w-sm text-sm leading-relaxed text-muted-foreground">
+                <h3 className="mt-5 text-xl font-semibold uppercase tracking-[-0.02em]">Audit queued</h3>
+                <p className="mt-2 max-w-sm text-sm leading-relaxed text-muted-foreground">
                   Your leak checklist for <span className="font-mono text-foreground">{site}</span> is being built. Watch{' '}
                   <span className="font-mono text-foreground">{email}</span> — it arrives within 48 hours, no call required.
                 </p>
