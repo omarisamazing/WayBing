@@ -1,5 +1,7 @@
+import { motion } from 'framer-motion'
 import { Reveal } from '@/components/site/reveal'
 import { cn } from '@/lib/utils'
+import { AnimatedCounter } from '@/components/site/animated-counter'
 
 export function Shell({ className, children }: { className?: string; children: React.ReactNode }) {
   return <div className={cn('mx-auto w-full max-w-[100rem] px-4 sm:px-6 lg:px-10', className)}>{children}</div>
@@ -46,13 +48,29 @@ export function Stat({
   label: string
   className?: string
 }) {
+  const isNumeric = /^\d+/.test(value)
+  const numericValue = isNumeric ? parseInt(value) : null
+  const suffix = value.replace(/^\d+/, '').trim()
+
   return (
-    <div className={cn('flex flex-col gap-2 px-4 py-6 sm:px-6', className)}>
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      viewport={{ once: true, amount: 0.5 }}
+      className={cn('flex flex-col gap-2 px-4 py-6 sm:px-6', className)}
+    >
       <span className="figure-mono text-[clamp(1.5rem,3vw,2.25rem)] font-medium leading-none tracking-[-0.03em]">
-        {value}
+        {isNumeric && numericValue !== null ? (
+          <>
+            <AnimatedCounter value={numericValue} duration={1.6} className="inline" suffix={suffix ? ` ${suffix}` : ''} />
+          </>
+        ) : (
+          value
+        )}
       </span>
       <span className="label-mono text-muted-foreground">{label}</span>
-    </div>
+    </motion.div>
   )
 }
 
