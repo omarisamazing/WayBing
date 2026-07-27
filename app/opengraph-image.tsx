@@ -40,6 +40,8 @@ export default function OpengraphImage() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
           <div
             style={{
+              display: 'flex',
+              flexWrap: 'wrap',
               fontSize: 84,
               fontWeight: 700,
               lineHeight: 1,
@@ -48,7 +50,8 @@ export default function OpengraphImage() {
               maxWidth: 980,
             }}
           >
-            We don&apos;t sell retainers. We build <span style={{ color: '#913CDC' }}>revenue engines.</span>
+            We don&apos;t sell retainers. We build{' '}
+            <span style={{ color: '#913CDC' }}>revenue engines.</span>
           </div>
           <div style={{ fontSize: 28, lineHeight: 1.4, color: '#4a4640', maxWidth: 900 }}>
             Creative, CRO, paid ads and SEO — wired to server-side tracking.
