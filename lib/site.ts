@@ -11,7 +11,7 @@ export const SITE = {
   /** Longer positioning line for hero copy and social cards. */
   proposition: 'Performance marketing and growth design that is measured against revenue, not impressions.',
   /** Set NEXT_PUBLIC_SITE_URL in production so canonicals and the sitemap are absolute. */
-  url: process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '') || 'https://waybing.com',
+  url: process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '') || 'https://waybing.vercel.app',
   email: 'growth@waybing.com',
   phone: '+1 (415) 555-0142',
   phoneHref: 'tel:+14155550142',
@@ -27,7 +27,7 @@ export const SITE = {
    * "waybing" and "digital marketing agency" queries have something to match.
    */
   description:
-    'WayBing is a digital marketing agency building revenue engines for founders and e-commerce brands: conversion-first web design, CRO, paid ads with server-side tracking, and SEO growth — backed by a 60-day guarantee.',
+    'WayBing is a digital marketing agency building revenue engines for founders and e-commerce brands: conversion-first web design, CRO, paid ads with server-side tracking, and SEO growth — backed by transparent reporting and full-funnel experimentation.',
   /** Short version for social cards and meta descriptions with tight limits. */
   shortDescription:
     'WayBing is a digital marketing agency for creative, CRO, paid ads and SEO — measured against blended CAC and contribution margin.',
