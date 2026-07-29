@@ -68,7 +68,9 @@ export const metadata: Metadata = {
   },
   // Set these in project env once the properties are claimed; omitted otherwise.
   verification: {
-    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+    google:
+      process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ??
+      '4vqdvRGs9rsa2jcvjo6ZfAcy1Joknke8wEXE2SuoMYs',
     other: process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION
       ? { 'msvalidate.01': process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION }
       : undefined,
@@ -98,7 +100,7 @@ export default function RootLayout({
       <body className="antialiased">
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:border focus:border-foreground focus:bg-background focus:px-4 focus:py-2 focus:font-mono focus:text-xs focus:uppercase focus:tracking-[0.14em]"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:border focus:border-foreground focus:bg-background focus:px-4 focus:py-2 focus:font-mono focus:text-sm"
         >
           Skip to content
         </a>
